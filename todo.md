@@ -3,3 +3,24 @@
 - gamemode
 - systemctl --user enable pipewire-pulse
 - systemctl --user start pipewire-puls
+- zram regex to override
+- package vs apt
+- Snapper then trixie (make backup of sources also)
+- hyprland
+- waybar
+- nvidia
+- steam
+- disable password ssh
+- gvfs and gvfs plugins
+- polkit
+- commpound i3wm (if it can be, in ram), else, only if files change
+- rsync cronjob in every week
+- polybar
+- zsh better vim 
+- networkmanager nmapplet
+- backgrounds from aaroncruces.com
+- terminal locales and keyboard
+- install font manager
+- setup suspend hybernation
+- grub 
+- tty themes

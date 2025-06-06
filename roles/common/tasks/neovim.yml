@@ -5,7 +5,7 @@
   ignore_errors: true
   changed_when: false
 
-- name: Install required packages for Docker
+- name: Install required packages for neovim
   apt:
     name:
       - build-essential

@@ -12,5 +12,8 @@
       - stow
       - tree
       - btrfs-progs
+      - zram-tools
+      - build-essential
+      - cmake
     state: present
 ...

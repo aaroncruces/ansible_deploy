@@ -5,7 +5,7 @@
   become: true
   become_method: sudo  
   roles:
-    # - common
+    - common
     - desktop
     # - whitetower
 
