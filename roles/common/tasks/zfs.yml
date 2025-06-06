@@ -19,8 +19,14 @@
       - zfs-dkms
     state: present
     default_release: "{{ ansible_distribution_release }}-backports"
+  register: zfs_installed
 
-#------------------MACHINE SHOULD REBOOT HERE------------------#
+- name: Reboot system if zfs packages were installed
+  reboot:
+    msg: "Rebooting system due to package installation"
+    reboot_timeout: 600
+  when: zfs_installed.changed
+
 
 - name: Load ZFS kernel module
   modprobe:

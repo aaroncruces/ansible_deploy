@@ -19,4 +19,16 @@
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"
   become: no
+
+- name: Allow ansible user to run poweroff and reboot without password
+  become: true
+  lineinfile:
+    path: /etc/sudoers.d/{{ ansible_user }}
+    line: "{{ ansible_user }} ALL=(root) NOPASSWD: /sbin/poweroff, /sbin/reboot"
+    create: yes
+    state: present
+    mode: '0440'
+    owner: root
+    group: root
+    validate: '/usr/sbin/visudo -cf %s'
 ...

@@ -6,7 +6,7 @@
   become_method: sudo  
   roles:
     - common
-    - desktop
+    # - desktop
     # - whitetower
 
 #    - dotfiles_stow # MUST BE THE FIRST ROLE
@@ -19,4 +19,4 @@
 #   connection: local
 #   roles:
 #     - local_dotfiles_stow 
-   
+...

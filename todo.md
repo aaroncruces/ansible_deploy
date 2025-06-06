@@ -1,5 +1,4 @@
 # To Do
-- reboot pc in zfs step
 - gamemode
 - systemctl --user enable pipewire-pulse
 - systemctl --user start pipewire-puls
@@ -24,3 +23,9 @@
 - setup suspend hybernation
 - grub 
 - tty themes
+- portainer
+- run this in localhost
+- xterm theme 
+- Xresources
+- pywal
+- visudo poweroff and reboot¿

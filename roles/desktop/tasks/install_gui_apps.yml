@@ -10,5 +10,6 @@
       - qbittorrent
       - dmenu
       - chromium
+      - obsidian
     state: present
 ...

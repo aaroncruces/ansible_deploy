@@ -15,5 +15,7 @@
       - zram-tools
       - build-essential
       - cmake
+      - imagemagick
+      - ffmpeg
     state: present
 ...
