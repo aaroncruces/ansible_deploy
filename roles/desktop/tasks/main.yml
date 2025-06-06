@@ -1,18 +1,9 @@
 ---
-- name: autologin tasks
-  include_tasks: autologin.yml
+- name: install wm
+  include_tasks: install_wm.yml
 
-- name: Window manager tasks
-  include_tasks: wm.yml
+- name: install gui apps
+  include_tasks: install_gui_apps.yml
 
-- name: Include font installation tasks
-  include_tasks: fonts.yml
-
-- name: Include applications tasks
-  include_tasks: apps.yml
-
-- name: Include RetroPie tasks
-  include_tasks: retropie.yml
-
-
-
+- name: stow
+  include_tasks: stow.yml

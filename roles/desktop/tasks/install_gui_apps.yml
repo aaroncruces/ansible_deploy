@@ -1,7 +1,14 @@
 ---
-- name: Install required packages
+- name: Install gui packages
   package:
     name:
-      - 
+      - firefox-esr
+      - kitty
+      - keepassxc
+      - pcmanfm
+      - jstest-gtk
+      - qbittorrent
+      - dmenu
+      - chromium
     state: present
 ...

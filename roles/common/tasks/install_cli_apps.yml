@@ -11,5 +11,6 @@
       - unzip
       - stow
       - tree
+      - btrfs-progs
     state: present
 ...

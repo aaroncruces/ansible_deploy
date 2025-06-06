@@ -5,6 +5,7 @@
       - pipewire
       - pipewire-audio 
       - pipewire-pulse
+      - pulseaudio-utils
       - pipewire-alsa
       - wireplumber
       - pulsemixer
@@ -24,6 +25,7 @@
       - xorg
       - xterm
       - xinit
+      - picom
     state: present
     update_cache: yes
 
@@ -35,3 +37,4 @@
       - arandr
       - dmenu
     state: present
+

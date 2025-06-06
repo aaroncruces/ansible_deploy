@@ -14,8 +14,8 @@
 # - name: Install Zsh
 #   include_tasks: zsh.yml
 
-# - name: stow dotfiles common
-#   include_tasks: stow.yml
+- name: stow dotfiles common
+  include_tasks: stow.yml
 
 # - name: tmux
 #   include_tasks: tmux.yml
@@ -29,6 +29,6 @@
 # - name: fonts for terminal apps
 #   include_tasks: fonts.yml
 
-- name: zfs driver
-  include_tasks: zfs.yml
+# - name: zfs driver
+#   include_tasks: zfs.yml
 ...

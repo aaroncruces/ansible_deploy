@@ -22,15 +22,15 @@
 - name: Check if stowed file exists
   ansible.builtin.find:
     paths: /home/{{ ansible_user }}/.config
-    patterns: "stowed"
+    patterns: "stowed_desktop"
     file_type: any
-  register: stowed
+  register: stowed_desktop
 
-- name: clenup, execute stow uninstall common
+- name: clenup, execute stow uninstall desktop
   become_user: "{{ ansible_user }}"
   shell:
-    cmd: /home/{{ ansible_user }}/gits/dotfiles_stow/stow_uninstall_common.sh
-  when: stowed.matched == true
+    cmd: /home/{{ ansible_user }}/gits/dotfiles_stow/stow_uninstall_desktop.sh
+  when: stowed_desktop.matched == true
   changed_when: false
 
 - name: Clone or update dotfiles_stow Git repository into gits folder
@@ -41,9 +41,9 @@
     update: yes
   become: no
 
-- name: install, execute stow install common
+- name: install, execute stow install desktop
   become_user: "{{ ansible_user }}"
   shell:
-    cmd: /home/{{ ansible_user }}/gits/dotfiles_stow/stow_install_common.sh
+    cmd: /home/{{ ansible_user }}/gits/dotfiles_stow/stow_install_desktop.sh
   changed_when: false
 ...
