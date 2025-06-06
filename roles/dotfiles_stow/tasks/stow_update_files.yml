@@ -1,0 +1,36 @@
+---
+- name: check if /home/{{ ansible_user }}/gits exists  
+  stat:
+    path: /home/{{ ansible_user }}/gits
+  register: gits_exists
+  changed_when: false
+
+- name: create gits directory
+  become_user: "{{ ansible_user }}"
+  file:
+    path: /home/{{ ansible_user }}/gits
+    state: directory
+  when: gits_exists.stat.exists == false
+
+- name: update dotfiles_stow repository
+  become_user: "{{ ansible_user }}"
+  git:
+    repo: "{{ vault_dotfiles_stow_repo_https }}"
+    dest: "/home/{{ ansible_user }}/gits/dotfiles_stow"
+    version: "{{ vault_dotfiles_stow_branch }}"
+    update: yes
+
+- name: execute stow install common
+  become_user: "{{ ansible_user }}"
+  shell:
+    cmd: /home/{{ ansible_user }}/gits/dotfiles_stow/stow_install_common.sh
+  
+- name: execute stow install redtower
+  become_user: "{{ ansible_user }}"
+  shell:
+    cmd: /home/{{ ansible_user }}/gits/dotfiles_stow/stow_install_redtower.sh
+
+- name: execute stow install retropie
+  become_user: "{{ ansible_user }}"
+  shell:
+    cmd: /home/{{ ansible_user }}/gits/dotfiles_stow/stow_install_retropie.sh

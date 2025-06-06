@@ -1,0 +1,54 @@
+---
+# TODO: TEST IF IT WORKS. see https://docs.docker.com/engine/install/debian/
+- name: Check if docker exists
+  command: which docker
+  register: docker_check
+  ignore_errors: true
+
+- name: Install required packages for Docker
+  apt:
+    name:
+      - ca-certificates
+      - curl
+      - gnupg
+    state: present
+  when: docker_check.rc != 0
+
+- name: Create apt keyrings directory
+  file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+  when: docker_check.rc != 0
+
+- name: Add Docker's official GPG key
+  apt_key:
+    url: https://download.docker.com/linux/debian/gpg
+    state: present
+  when: docker_check.rc != 0
+
+- name: Add Docker repository
+  apt_repository:
+    repo: deb [arch=amd64] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable
+    state: present
+    filename: docker
+  when: docker_check.rc != 0
+
+- name: Install Docker packages
+  apt:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
+    state: present
+    update_cache: yes
+  when: docker_check.rc != 0
+
+- name: Add user to docker group
+  user:
+    name: "{{ ansible_user }}"
+    groups: docker
+    append: yes
+  when: docker_check.rc != 0 

@@ -1,0 +1,20 @@
+---
+
+- name: Configure remote server
+  hosts: remote
+  become: true
+  become_method: sudo  
+  roles:
+    - dotfiles_stow
+
+#    - dotfiles_stow # MUST BE THE FIRST ROLE
+#    - base # MUST BE THE SECOND ROLE
+#    - desktop
+#    - zfs
+
+# - name: Setup local dotfiles
+#   hosts: localhost
+#   connection: local
+#   roles:
+#     - local_dotfiles_stow 
+   

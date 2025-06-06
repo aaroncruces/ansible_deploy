@@ -1,0 +1,23 @@
+---
+- name: Install stow
+  apt:
+    name: stow
+    state: present
+
+- name: check if /home/{{ ansible_user }}/gits/dotfiles_stow/ exists  
+  stat:
+    path: /home/{{ ansible_user }}/gits/dotfiles_stow/
+  register: dotfiles_stow_exists
+  changed_when: false
+
+- name: Check if stowed file exists
+  find:
+    paths: /home/{{ ansible_user }}/.config
+    patterns: "stowed"
+  register: stowed
+
+- name: execute stow uninstall common
+  become_user: "{{ ansible_user }}"
+  shell:
+    cmd: /home/{{ ansible_user }}/gits/dotfiles_stow/stow_uninstall_common.sh
+  when: stowed.matched == 1 and dotfiles_stow_exists.stat.exists == true

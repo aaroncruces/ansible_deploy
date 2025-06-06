@@ -1,0 +1,2 @@
+#!/bin/bash
+GIT_SSH_COMMAND="sshpass -Ppassphrase -f <(printf '%s\n' {{ vault_github_aaroncruces_ssh_key_passphrase }}) ssh -o PreferredAuthentications=publickey -i {{ vault_github_aaroncruces_ssh_key_path }}" git clone --origin github {{ vault_dotfiles_stow_repo }}

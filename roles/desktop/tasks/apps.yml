@@ -1,0 +1,12 @@
+---
+- name: Install RetroArch and dependencies
+  apt:
+    name:
+      - retroarch
+      - libretro-*
+      - libsdl2-2.0-0
+      - libsdl2-image-2.0-0
+      - libsdl2-ttf-2.0-0
+      - jstest-gtk
+      - kitty
+    state: present

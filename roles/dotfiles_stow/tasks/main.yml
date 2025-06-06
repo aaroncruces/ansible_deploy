@@ -1,0 +1,16 @@
+---
+- name: stow common precleanup
+  include_tasks: stow_common_precleanup.yml
+
+- name: stow redtower precleanup
+  include_tasks: stow_redtower_precleanup.yml
+
+- name: link configs retropie
+  include_tasks: link_configs_retropie.yml
+
+- name: stow update files
+  include_tasks: stow_update_files.yml
+
+
+
+

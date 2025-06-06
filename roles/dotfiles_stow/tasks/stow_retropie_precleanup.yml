@@ -1,0 +1,24 @@
+---
+- name: Install stow
+  apt:
+    name: stow
+    state: present
+
+- name: check if /home/{{ ansible_user }}/gits/dotfiles_stow/ exists  
+  stat:
+    path: /home/{{ ansible_user }}/gits/dotfiles_stow/
+  register: dotfiles_stow_exists
+  changed_when: false
+
+- name: Check if stowed_retropie file exists
+  find:
+    paths: /opt/retropie/configs/all
+    patterns: "stowed_retropie"
+  register: stowed_retropie
+
+- name: execute stow uninstall retropie
+  become_user: "{{ ansible_user }}"
+  shell:
+    cmd: /home/{{ ansible_user }}/gits/dotfiles_stow/stow_uninstall_retropie.sh
+  when: stowed_retropie.matched == 1 and dotfiles_stow_exists.stat.exists == true
+  ignore_errors: true

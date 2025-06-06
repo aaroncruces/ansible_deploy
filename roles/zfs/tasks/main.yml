@@ -1,0 +1,67 @@
+---
+- name: Add backports repository
+  apt_repository:
+    repo: "deb http://deb.debian.org/debian {{ ansible_distribution_release }}-backports main contrib non-free"
+    state: present
+    filename: backports
+
+- name: Update apt cache
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Install required packages
+  apt:
+    name:
+      - linux-headers-amd64
+      - zfsutils-linux
+      - zfs-dkms
+    state: present
+    default_release: "{{ ansible_distribution_release }}-backports"
+
+- name: Load ZFS kernel module
+  modprobe:
+    name: zfs
+    state: present
+
+- name: Enable ZFS module loading on boot
+  lineinfile:
+    path: /etc/modules-load.d/zfs.conf
+    line: 'zfs'
+    create: yes
+    mode: '0644'
+
+- name: Create ZFS cache directory
+  file:
+    path: /etc/zfs/zfs-list.cache
+    state: directory
+    mode: '0755'
+
+- name: Enable ZFS cache
+  lineinfile:
+    path: /etc/default/zfs
+    regexp: '^ZFS_LIST_CACHE='
+    line: 'ZFS_LIST_CACHE=1'
+    create: yes
+
+- name: Reload systemd daemon
+  systemd:
+    daemon_reload: yes
+
+- name: Enable and start ZFS systemd services
+  systemd:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+  loop:
+    - zfs.target
+    - zfs-import.target
+    - zfs-import-cache.service
+    - zfs-mount.service
+    - zfs-share.service
+
+- name: Import all ZFS pools
+  command: zpool import -af
+  register: zpool_import
+  changed_when: zpool_import.rc == 0
+  failed_when: zpool_import.rc != 0 and "no pools available" not in zpool_import.stderr

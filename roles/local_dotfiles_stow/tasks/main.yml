@@ -1,0 +1,13 @@
+- name: Git operations in dotfiles_stow as local user
+  ansible.builtin.shell: 
+    cmd: |
+      cd "{{ playbook_dir }}/dotfiles_stow"
+      git checkout master
+      git add -A
+      git commit -m "fixes"
+      GIT_SSH_COMMAND="sshpass -Ppassphrase -f <(printf '%s\n' {{ vault_github_aaroncruces_ssh_key_passphrase }}) ssh -o PreferredAuthentications=publickey -i {{ vault_github_aaroncruces_ssh_key_path }}"  git push -u origin master
+      cd "{{ playbook_dir }}/dotfiles_stow"
+      git checkout redtower
+      git merge master
+      GIT_SSH_COMMAND="sshpass -Ppassphrase -f <(printf '%s\n' {{ vault_github_aaroncruces_ssh_key_passphrase }}) ssh -o PreferredAuthentications=publickey -i {{ vault_github_aaroncruces_ssh_key_path }}"  git push -u origin redtower 
+      git checkout master

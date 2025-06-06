@@ -1,0 +1,37 @@
+---
+- name: Install PipeWire and audio tools
+  apt:
+    name:
+      - pipewire
+      - pipewire-audio 
+      - pipewire-pulse
+      - pipewire-alsa
+      - wireplumber
+      - pulsemixer
+      - alsa-utils
+    state: present
+
+- name: Install graphical dependencies
+  apt:
+    name:
+      - mesa-utils
+
+    state: present
+
+- name: Install Xorg and common dependencies
+  apt:
+    name:
+      - xorg
+      - xterm
+      - xinit
+    state: present
+    update_cache: yes
+
+- name: Install i3 and dependencies
+  apt:
+    name:
+      - i3-wm
+      - rofi
+      - arandr
+      - dmenu
+    state: present

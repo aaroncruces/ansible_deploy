@@ -1,0 +1,20 @@
+---
+- name: ---> check if /opt/retropie/configs/all exists
+  stat:
+    path: /opt/retropie/configs/all
+  register: opt_all_exists
+  become_user: "{{ ansible_user }}"
+  changed_when: false
+
+- name: check if /home/{{ ansible_user }}/RetroPie exists
+  stat:
+    path: /home/{{ ansible_user }}/RetroPie
+  register: retropie_exists
+  changed_when: false
+
+- name: link /opt/retropie/configs/all/ to /home/{{ ansible_user }}/RetroPie
+  file:
+    src: /opt/retropie/configs/all/
+    dest: /home/{{ ansible_user }}/RetroPie/config_all
+    state: link
+  when: opt_all_exists.stat.exists == true and retropie_exists.stat.exists == true

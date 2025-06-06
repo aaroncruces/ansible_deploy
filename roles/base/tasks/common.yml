@@ -1,0 +1,27 @@
+---
+- name: Install required packages
+  package:
+    name:
+      - htop
+      - git
+      - nano
+      - zsh
+      - intel-microcode
+      - amd64-microcode
+      - unzip
+    state: present
+
+- name: Add user to systemd groups
+  user:
+    name: "{{ ansible_user }}"
+    groups: adm,systemd-journal
+    append: yes
+
+
+- name: Create gits directory
+  file:
+    path: /home/{{ ansible_user }}/gits
+    state: directory
+    mode: '0750'
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"

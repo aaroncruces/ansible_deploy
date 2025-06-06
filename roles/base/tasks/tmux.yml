@@ -1,0 +1,25 @@
+---
+- name: Install tmux
+  apt:
+    name: tmux
+    state: present
+
+- name: Create ~/gits/tmux_plugins/ directory
+  file:
+    path: "/home/{{ ansible_user }}/gits/tmux_plugins/"
+    state: directory
+    mode: '0750'
+    owner: "{{ ansible_user }}"
+
+- name: Check if tpm is already installed
+  stat:
+    path: "/home/{{ ansible_user }}/gits/tpm"
+  register: tpm_dir
+
+- name: Install tpm
+  git:
+    repo: https://github.com/tmux-plugins/tpm.git
+    dest: "/home/{{ ansible_user }}/gits/tpm"
+    depth: 1
+  when: not tpm_dir.stat.exists
+
