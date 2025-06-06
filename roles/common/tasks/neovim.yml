@@ -3,6 +3,7 @@
   command: which nvim
   register: nvim_check
   ignore_errors: true
+  changed_when: false
 
 - name: Install required packages for Docker
   apt:
@@ -18,6 +19,7 @@
     repo: https://github.com/neovim/neovim.git
     dest: /home/{{ ansible_user }}/gits/neovim
     version: stable
+    update: yes
   become_user: "{{ ansible_user }}"
   when: nvim_check.rc != 0
 

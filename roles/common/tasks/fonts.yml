@@ -1,4 +1,9 @@
 ---
+- name: Install required packages
+  package:
+    name:
+      - fontconfig
+    state: present
 
 - name: Check if JetBrains fonts are already installed
   find:

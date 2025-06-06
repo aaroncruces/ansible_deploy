@@ -4,6 +4,7 @@
   command: which docker
   register: docker_check
   ignore_errors: true
+  changed_when: false
 
 - name: Install required packages for Docker
   apt:

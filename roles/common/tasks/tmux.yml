@@ -16,10 +16,11 @@
     path: "/home/{{ ansible_user }}/gits/tpm"
   register: tpm_dir
 
-- name: Install tpm
+- name: Install tpm in gits directory
   git:
     repo: https://github.com/tmux-plugins/tpm.git
     dest: "/home/{{ ansible_user }}/gits/tpm"
     depth: 1
+    update: yes
   when: not tpm_dir.stat.exists
 

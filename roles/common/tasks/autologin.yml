@@ -23,4 +23,5 @@
   systemd:
     name: getty@tty1.service
     state: restarted 
-  when: autologin_config.changed 
+  when: autologin_config.changed
+...

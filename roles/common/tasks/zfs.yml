@@ -9,6 +9,7 @@
   apt:
     update_cache: yes
     cache_valid_time: 3600
+  changed_when: false
 
 - name: Install required packages
   apt:
@@ -18,6 +19,8 @@
       - zfs-dkms
     state: present
     default_release: "{{ ansible_distribution_release }}-backports"
+
+#------------------MACHINE SHOULD REBOOT HERE------------------#
 
 - name: Load ZFS kernel module
   modprobe:
@@ -59,9 +62,12 @@
     - zfs-import-cache.service
     - zfs-mount.service
     - zfs-share.service
+  changed_when: false
 
 - name: Import all ZFS pools
   command: zpool import -af
   register: zpool_import
-  changed_when: zpool_import.rc == 0
+  # changed_when: zpool_import.rc == 0
   failed_when: zpool_import.rc != 0 and "no pools available" not in zpool_import.stderr
+  changed_when: false
+  
