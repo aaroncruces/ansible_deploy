@@ -8,7 +8,7 @@
 - name: Add user common groups
   user:
     name: "{{ ansible_user }}"
-    groups: tty,video,kvm,input,disk,audio,cdrom,floppy,sudo,dip,plugdev,users,netdev
+    groups: tty,video,kvm,input,disk,audio,cdrom,floppy,sudo,dip,plugdev,users,netdev,gamemode
     append: yes
 
 - name: Ensure gits folder exists for the current user

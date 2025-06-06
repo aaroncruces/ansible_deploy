@@ -17,5 +17,6 @@
       - cmake
       - imagemagick
       - ffmpeg
+      - gamemode
     state: present
 ...

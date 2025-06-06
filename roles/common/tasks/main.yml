@@ -2,8 +2,8 @@
 # - name: Prepare apt to installs
 #   include_tasks: apt_prepare.yml
 
-# - name: Include common cli apps
-#   include_tasks: install_cli_apps.yml
+- name: Include common cli apps
+  include_tasks: install_cli_apps.yml
 
 # - name: Include common gui apps
 #   include_tasks: install_gui_apps.yml

@@ -28,4 +28,3 @@
 - xterm theme 
 - Xresources
 - pywal
-- visudo poweroff and reboot¿
