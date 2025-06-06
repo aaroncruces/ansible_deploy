@@ -1,0 +1,34 @@
+---
+- name: Remove the deb cdrom line from sources.list
+  ansible.builtin.lineinfile:
+    path: /etc/apt/sources.list
+    regexp: '^deb cdrom:'
+    state: absent
+  become: yes
+
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: yes
+  become: yes
+
+- name: Upgrade all packages
+  ansible.builtin.apt:
+    upgrade: dist
+  become: yes
+
+- name: Remove unused packages
+  ansible.builtin.apt:
+    autoremove: yes
+  become: yes
+
+- name: Clean up unused dependency packages
+  ansible.builtin.apt:
+    autoclean: yes
+  become: yes
+
+# - name: Clean apt cache
+#   ansible.builtin.apt:
+#     clean: yes
+#   become: yes
+#   changed_when: false
+...

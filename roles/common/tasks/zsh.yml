@@ -3,6 +3,7 @@
   command: which zsh
   register: zsh_check
   ignore_errors: true
+  changed_when: false
 
 - name: Install zsh
   apt:
@@ -28,8 +29,6 @@
     depth: 1
   when: not antidote_dir.stat.exists
 
-
-
 - name: Check if Oh My Posh is installed
   stat:
     path: "/home/{{ ansible_user }}/gits/ohmyposh_install.sh"
@@ -43,7 +42,6 @@
     state: present
   when: not omp_check.stat.exists
   become_user: "{{ ansible_user }}"
-
 
 - name: Download Oh My Posh installer
   get_url:
@@ -63,3 +61,4 @@
     cmd: /home/{{ ansible_user }}/.local/bin/oh-my-posh font install JetBrainsMono
   become_user: "{{ ansible_user }}"
   when: not omp_check.stat.exists
+...

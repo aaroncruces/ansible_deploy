@@ -1,0 +1,19 @@
+---
+# - name: Prepare apt to installs
+#   include_tasks: apt_prepare.yml
+
+# - name: Include common cli apps
+#   include_tasks: install_cli_apps.yml
+
+# - name: Docker
+#   include_tasks: docker.yml
+
+# - name: Edit user properties
+#   include_tasks: user.yml
+
+# - name: Install Zsh
+#   include_tasks: zsh.yml
+
+- name: stow dotfiles common
+  include_tasks: stow.yml
+...

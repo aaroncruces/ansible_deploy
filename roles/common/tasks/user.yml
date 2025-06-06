@@ -1,0 +1,22 @@
+---
+- name: Add user to systemd groups
+  user:
+    name: "{{ ansible_user }}"
+    groups: adm,systemd-journal
+    append: yes
+
+- name: Add user common groups
+  user:
+    name: "{{ ansible_user }}"
+    groups: tty,video,kvm,input,disk,audio,cdrom,floppy,sudo,dip,plugdev,users,netdev
+    append: yes
+
+- name: Ensure gits folder exists for the current user
+  ansible.builtin.file:
+    path: /home/{{ ansible_user }}/gits
+    state: directory
+    mode: '0755'
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+  become: no
+...

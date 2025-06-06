@@ -1,0 +1,15 @@
+---
+- name: Install required packages
+  package:
+    name:
+      - htop
+      - git
+      - nano
+      - zsh
+      - intel-microcode
+      - amd64-microcode
+      - unzip
+      - stow
+      - tree
+    state: present
+...

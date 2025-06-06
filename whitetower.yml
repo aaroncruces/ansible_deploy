@@ -5,7 +5,8 @@
   become: true
   become_method: sudo  
   roles:
-    - base
+    # - preconfig_debian
+    - common
 
 #    - dotfiles_stow # MUST BE THE FIRST ROLE
 #    - base # MUST BE THE SECOND ROLE
