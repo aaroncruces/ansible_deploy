@@ -1,0 +1,12 @@
+- name: Configure GRUB using template
+  ansible.builtin.template:
+    src: grub.j2
+    dest: /etc/default/grub
+    owner: root
+    group: root
+    mode: '0644'
+    backup: yes
+
+- name: Update GRUB configuration with mkconfig
+  ansible.builtin.command:
+    cmd: grub-mkconfig -o /boot/grub/grub.cfg

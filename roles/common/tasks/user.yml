@@ -5,6 +5,14 @@
     groups: adm,systemd-journal
     append: yes
 
+- name: Ensure groups exist
+  ansible.builtin.group:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ group_list.split(',') }}"
+  vars:
+    group_list: "tty,video,kvm,input,disk,audio,cdrom,floppy,sudo,dip,plugdev,users,netdev,gamemode"
+    
 - name: Add user common groups
   user:
     name: "{{ ansible_user }}"

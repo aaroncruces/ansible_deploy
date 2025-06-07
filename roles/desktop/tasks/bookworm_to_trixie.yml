@@ -1,3 +1,79 @@
 ---
+- name: Check if distribution is Debian Bookworm
+  ansible.builtin.shell: grep -E '^VERSION_CODENAME=bookworm$' /etc/os-release
+  register: distro_check
+  changed_when: false
+  ignore_errors: yes
+
+- name: Set fact for Bookworm check
+  ansible.builtin.set_fact:
+    is_bookworm: "{{ distro_check.rc == 0 }}"
+  
+- name: Find sources.list files containing Bookworm
+  shell: find /etc/apt -type f -name '*.list' -exec grep -il "bookworm" {} \;
+  register: files_to_backup
+  changed_when: false
+  when: is_bookworm
+
+- name: Backup sources.list files containing Bookworm
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ item }}.backup.bookworm"
+    remote_src: yes
+  loop: "{{ files_to_backup.stdout_lines }}"
+  when: is_bookworm
+  
+- name: List snapper snapshots
+  ansible.builtin.command: snapper list
+  register: snapper_list
+  changed_when: false
+
+- name: Create snapper snapshot if bookworm_pre_trixie not found
+  ansible.builtin.command: snapper -c root create -d "***bookworm_pre_trixie***"
+  when: 
+    - '"***bookworm_pre_trixie***" not in snapper_list.stdout'
+    - is_bookworm
+
+- name: Update sources.list files from Bookworm to Trixie
+  shell: sed -i.bak 's/bookworm/trixie/g' {{ item | quote }}
+  loop: "{{ files_to_backup.stdout_lines | default([]) }}"
+  when:
+    - is_bookworm
+    - item.startswith('/etc/apt/')
+
+- name: Update package cache after sources change
+  ansible.builtin.apt:
+    update_cache: yes
+  changed_when: false
+  when: is_bookworm
+  
+- name: Perform distribution upgrade to Trixie
+  ansible.builtin.apt:
+    upgrade: full
+    autoclean: yes
+    autoremove: yes
+  when: is_bookworm
+
+- name: List snapper snapshots
+  ansible.builtin.command: snapper list
+  register: snapper_list_again
+  changed_when: false
+
+- name: Check if distribution is Debian Trixie
+  ansible.builtin.shell: grep -E '^VERSION_CODENAME=trixie$' /etc/os-release
+  register: trixie_check
+  changed_when: false
+  ignore_errors: yes
+
+- name: Set fact for Trixie check
+  ansible.builtin.set_fact:
+    is_trixie: "{{ trixie_check.rc == 0 }}"
+
+- name: Create snapper snapshot if trixie_post_bookworm not found
+  ansible.builtin.command: snapper -c root create -d "***trixie_post_bookworm***"
+  when: 
+    - '"***trixie_post_bookworm***" not in snapper_list_again.stdout'
+    - '"***bookworm_pre_trixie***" in snapper_list_again.stdout'
+    - is_trixie
 
 ...

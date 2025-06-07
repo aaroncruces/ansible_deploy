@@ -1,11 +1,4 @@
 # To Do
-- gamemode
-- systemctl --user enable pipewire-pulse
-- systemctl --user start pipewire-puls
-- zram regex to override
-- package vs apt
-- Snapper then trixie (make backup of sources also)
-- hyprland
 - waybar
 - nvidia
 - steam
@@ -28,3 +21,8 @@
 - xterm theme 
 - Xresources
 - pywal
+- systemctl --user enable pipewire-pulse
+- systemctl --user start pipewire-pulse
+- package vs apt
+- snapper shapshot at the end
+- windows

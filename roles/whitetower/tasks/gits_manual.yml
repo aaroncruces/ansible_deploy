@@ -1,0 +1,20 @@
+---
+- name: Ensure gits folder exists for the current user
+  ansible.builtin.file:
+    path: /home/{{ ansible_user }}/gits
+    state: directory
+    mode: '0755'
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+  become: no
+
+
+- name: Clone or update dotfiles_stow Git repository into gits folder
+  ansible.builtin.git:
+    repo: 'https://github.com/JaKooLit/Debian-Hyprland.git'
+    dest: /home/{{ ansible_user }}/gits/Debian-Hyprland
+    version: main
+    update: yes
+  become: no
+
+...
