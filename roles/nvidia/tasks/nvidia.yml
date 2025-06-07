@@ -1,17 +1,63 @@
 ---
+- name: Check if NVIDIA driver is installed
+  ansible.builtin.command: nvidia-smi
+  register: nvidia_check
+  failed_when: false
+  changed_when: false
+
+- name: Call specific task from another role
+  include_role:
+    name: common
+    tasks_from: apt_prepare.yml
+  when: nvidia_check.rc != 0
+
+- name: Get current kernel version
+  ansible.builtin.command: uname -r
+  changed_when: false
+  register: kernel_version
+  when: nvidia_check.rc != 0
+
+- name: Install Linux headers for current kernel
+  ansible.builtin.apt:
+    name: "linux-headers-{{ kernel_version.stdout }}"
+    state: present
+    update_cache: true
+  when: nvidia_check.rc != 0
+
 - name: Ensure NVIDIA DKMS and related packages are installed on Debian
   ansible.builtin.apt:
     name:
       - nvidia-driver
-      - nvidia-dkms
-      - nvidia-utils
+      - firmware-misc-nonfree
+      - nvidia-kernel-dkms
+      - nvidia-vaapi-driver
+      - nvidia-settings
     state: present
-    update_cache: yes
   become: yes
+  when: nvidia_check.rc != 0
+
+- name: Create blacklist-nouveau.conf to disable Nouveau
+  ansible.builtin.copy:
+    dest: /etc/modprobe.d/blacklist-nouveau.conf
+    content: |
+      blacklist nouveau
+      options nouveau modeset=0
+    owner: root
+    group: root
+    mode: '0644'
+  become: yes
+  when: nvidia_check.rc != 0
+
+- name: Regenerate initramfs to apply Nouveau blacklist
+  ansible.builtin.command:
+    cmd: update-initramfs -u
+  become: yes
+  when: nvidia_check.rc != 0
+  changed_when: false
 
 - name: Reboot system after NVIDIA driver installation
   ansible.builtin.reboot:
     reboot_timeout: 300
   become: yes
-
+  when: nvidia_check.rc != 0
 ...

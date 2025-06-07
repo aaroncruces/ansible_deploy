@@ -1,4 +1,11 @@
 ---
+- name: Remove dpkg lock file
+  ansible.builtin.command:
+    cmd: rm -f /var/lib/dpkg/lock-frontend
+  become: yes
+  ignore_errors: yes  # Continue even if the file doesn't exist or can't be removed
+  changed_when: false
+
 - name: Remove the deb cdrom line from sources.list
   ansible.builtin.lineinfile:
     path: /etc/apt/sources.list

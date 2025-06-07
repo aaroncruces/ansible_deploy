@@ -1,8 +1,6 @@
 # To Do
 - waybar
-- nvidia
 - steam
-- disable password ssh
 - gvfs and gvfs plugins
 - polkit
 - commpound i3wm (if it can be, in ram), else, only if files change
@@ -14,7 +12,6 @@
 - terminal locales and keyboard
 - install font manager
 - setup suspend hybernation
-- grub 
 - tty themes
 - portainer
 - run this in localhost
@@ -26,3 +23,4 @@
 - package vs apt
 - snapper shapshot at the end
 - windows
+- license

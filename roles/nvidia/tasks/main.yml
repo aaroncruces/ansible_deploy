@@ -1,5 +1,4 @@
 ---
-
 - name: nvidia driver
   include_tasks: nvidia.yml
 ...

@@ -18,5 +18,7 @@
       - imagemagick
       - ffmpeg
       - gamemode
+      - gvfs
+      - gvfs-backends
     state: present
 ...
