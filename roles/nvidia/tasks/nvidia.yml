@@ -1,0 +1,17 @@
+---
+- name: Ensure NVIDIA DKMS and related packages are installed on Debian
+  ansible.builtin.apt:
+    name:
+      - nvidia-driver
+      - nvidia-dkms
+      - nvidia-utils
+    state: present
+    update_cache: yes
+  become: yes
+
+- name: Reboot system after NVIDIA driver installation
+  ansible.builtin.reboot:
+    reboot_timeout: 300
+  become: yes
+
+...

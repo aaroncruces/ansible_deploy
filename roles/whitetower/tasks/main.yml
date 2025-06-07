@@ -1,8 +1,9 @@
 ---
 
-- name: github to manually install
-  include_tasks: gits_manual.yml
-
 - name: grub
   include_tasks: grub.yml
+
+- name: nvidia driver
+  include_role: 
+    name: nvidia
 ...
