@@ -1,0 +1,10 @@
+---
+
+- name: Install Hidamari from Flathub
+  community.general.flatpak:
+    name: io.github.jeffshee.Hidamari
+    state: present
+    remote: flathub
+  become: yes
+  
+...

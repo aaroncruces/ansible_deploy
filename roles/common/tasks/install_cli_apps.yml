@@ -1,5 +1,5 @@
 ---
-- name: Install required packages
+- name: Install cli apps on apt
   package:
     name:
       - htop
@@ -26,5 +26,9 @@
       - gawk 
       - inotify-tools
       - make
+      - ntfs-3g
+      - software-properties-common
+      - python3-launchpadlib
+      - yt-dlp 
     state: present
 ...

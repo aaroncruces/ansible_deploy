@@ -278,5 +278,7 @@ sshpass -Ppassphrase -f <(printf '%s\n' $ssh_passphrase) ssh -i $ssh_key -o Pref
 echo
 echo "apt install packages"
 sshpass -Ppassphrase -f <(printf '%s\n' $ssh_passphrase) ssh -i $ssh_key -o PreferredAuthentications=publickey -p $remote_port $remote_user@$remote_ip "echo '$remote_sudo_password' | sudo -S apt upgrade -y python3 python3-pip python3-full sshpass git ansible stow"
+
+# TODO:  ansible-galaxy collection install community.general # in local and remote
 echo
 echo "Bootstrap process completed successfully."

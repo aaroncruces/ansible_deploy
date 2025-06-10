@@ -1,5 +1,6 @@
 # To Do
 - waybar
+- ansible-galaxy collection install community.general # in local and remote, ansible user and sudo
 - steam
 - gvfs and gvfs plugins
 - polkit
@@ -24,5 +25,11 @@
 - snapper shapshot at the end
 - windows
 - license
-- flatpak
+- flatpaks
     - obsidian
+- browsers
+    - bitwarden
+    - ublock origin
+    - maybe profiles from bucket
+
+- optimize bootstrap for  nopass (maybe create nopass if doesnt exist?)
