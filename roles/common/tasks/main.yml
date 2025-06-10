@@ -17,8 +17,8 @@
 # - name: Install Zsh
 #   include_tasks: zsh.yml
 
-# - name: stow dotfiles common
-#   include_tasks: stow.yml
+- name: stow dotfiles common
+  include_tasks: stow.yml
 
 # - name: tmux
 #   include_tasks: tmux.yml
@@ -41,6 +41,6 @@
 # - name: snapper
 #   include_tasks: snapper.yml
 
-- name: flatpak
-  include_tasks: flatpak.yml
+# - name: flatpak
+#   include_tasks: flatpak.yml
 ...

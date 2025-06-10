@@ -5,8 +5,8 @@
 # - name: install gui apps
 #   include_tasks: install_gui_apps.yml
 
-# - name: stow
-#   include_tasks: stow.yml
+- name: stow
+  include_tasks: stow.yml
 
 # # - name: update debian
 # #   include_tasks: bookworm_to_trixie.yml
@@ -14,6 +14,6 @@
 # # - name: gits manual
 # #   include_tasks: gits_manual.yml
 
-- name: flatpak
-  include_tasks: flatpak.yml
+# - name: flatpak
+#   include_tasks: flatpak.yml
 ...

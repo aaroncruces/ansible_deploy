@@ -9,13 +9,12 @@
 - polybar
 - zsh better vim 
 - networkmanager nmapplet
-- backgrounds from aaroncruces.com
+- backgrounds from aaroncruces.com (CDN)
 - terminal locales and keyboard
 - install font manager
 - setup suspend hybernation
 - tty themes
 - portainer
-- run this in localhost
 - xterm theme 
 - Xresources
 - pywal
@@ -33,3 +32,5 @@
     - maybe profiles from bucket
 
 - optimize bootstrap for  nopass (maybe create nopass if doesnt exist?)
+- go step by step tasks
+- fix apt sources.lists errors on tasks
