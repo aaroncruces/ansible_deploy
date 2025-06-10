@@ -1,7 +1,6 @@
 ---
-
-# - name: grub
-#   include_tasks: grub.yml
+- name: grub
+  include_tasks: grub.yml
 
 - name: nvidia driver
   include_role: 

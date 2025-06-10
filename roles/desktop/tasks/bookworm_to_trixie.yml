@@ -76,4 +76,19 @@
     - '"***bookworm_pre_trixie***" in snapper_list_again.stdout'
     - is_trixie
 
+- name: Ensure apt backups folder
+  ansible.builtin.file:
+    path: /etc/apt_backup
+    state: directory
+    mode: '0755'
+    owner: "root"
+    group: "root"
+
+
+- name: move backups to /etc/apt_backup
+  shell: find /etc/apt -type f -name "*.bkp" -o -name "*.bak*" -o -name "*.bookworm" -exec mv "{}" /etc/apt_backup \;
+  changed_when: false
+  when: is_trixie
+
+
 ...

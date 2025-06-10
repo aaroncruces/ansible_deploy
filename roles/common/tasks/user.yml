@@ -26,8 +26,7 @@
     mode: '0755'
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"
-  become: no
-
+    
 - name: Allow ansible user to run poweroff and reboot without password
   become: true
   lineinfile:

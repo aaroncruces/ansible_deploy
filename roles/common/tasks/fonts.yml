@@ -49,3 +49,4 @@
     cmd: fc-cache -fv
   ignore_errors: true
   when: jetbrains_fonts.matched == 0
+  become_user: "{{ ansible_user }}"

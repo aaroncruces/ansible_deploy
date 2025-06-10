@@ -11,15 +11,58 @@
     cache_valid_time: 3600
   changed_when: false
 
+- name: Get current kernel version
+  ansible.builtin.command: uname -r
+  changed_when: false
+  register: kernel_version_zfs
+
+- name: Install Linux headers for current kernel
+  ansible.builtin.apt:
+    name: "linux-headers-{{ kernel_version_zfs.stdout }}"
+    state: present
+    update_cache: true
+
+- name: Check if distribution is Debian Bookworm
+  ansible.builtin.shell: grep -E '^VERSION_CODENAME=bookworm$' /etc/os-release
+  register: distro_check
+  changed_when: false
+  ignore_errors: yes
+
+- name: Set fact for Bookworm check
+  ansible.builtin.set_fact:
+    is_bookworm: "{{ distro_check.rc == 0 }}"
+
+- name: Check if distribution is Debian Trixie
+  ansible.builtin.shell: grep -E '^VERSION_CODENAME=trixie$' /etc/os-release
+  register: trixie_check
+  changed_when: false
+  ignore_errors: yes
+
+- name: Set fact for Trixie check
+  ansible.builtin.set_fact:
+    is_trixie: "{{ trixie_check.rc == 0 }}"
+
+
 - name: Install required packages
   apt:
     name:
-      - linux-headers-amd64
       - zfsutils-linux
       - zfs-dkms
     state: present
     default_release: "{{ ansible_distribution_release }}-backports"
   register: zfs_installed
+  when: is_bookworm
+
+
+- name: Install required packages
+  apt:
+    name:
+      - zfsutils-linux
+      - zfs-dkms
+    state: present
+  register: zfs_installed
+  when: is_trixie
+
 
 - name: Reboot system if zfs packages were installed
   reboot:

@@ -6,7 +6,9 @@
     group: root
     mode: '0644'
     backup: yes
+  changed_when: false
 
 - name: Update GRUB configuration with mkconfig
   ansible.builtin.command:
     cmd: grub-mkconfig -o /boot/grub/grub.cfg
+  changed_when: false

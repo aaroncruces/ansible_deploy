@@ -9,7 +9,7 @@
     path: "/home/{{ ansible_user }}/gits/tmux_plugins/"
     state: directory
     mode: '0750'
-    owner: "{{ ansible_user }}"
+  become_user: "{{ ansible_user }}"
 
 - name: Check if tpm is already installed
   stat:
@@ -23,4 +23,5 @@
     depth: 1
     update: yes
   when: not tpm_dir.stat.exists
+  become_user: "{{ ansible_user }}"
 

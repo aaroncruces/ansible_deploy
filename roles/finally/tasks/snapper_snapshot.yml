@@ -1,0 +1,4 @@
+---
+- name: Create snapper snapshot if trixie_post_bookworm not found
+  ansible.builtin.command: snapper -c root create -d "***Post_Ansible_Setup***"
+...

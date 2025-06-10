@@ -5,8 +5,8 @@
   become: true
   become_method: sudo  
   roles:
-    # - common
-    # - desktop
+    - common
+    - desktop
     - whitetower
 
 #    - dotfiles_stow # MUST BE THE FIRST ROLE

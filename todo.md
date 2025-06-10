@@ -24,3 +24,5 @@
 - snapper shapshot at the end
 - windows
 - license
+- flatpak
+    - obsidian

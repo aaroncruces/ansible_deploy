@@ -21,7 +21,7 @@
     version: stable
     update: yes
   become_user: "{{ ansible_user }}"
-  when: nvim_check.rc != 0
+  # when: nvim_check.rc != 0
 
 - name: Build neovim
   shell:

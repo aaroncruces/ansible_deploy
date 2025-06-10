@@ -6,7 +6,6 @@
     mode: '0755'
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"
-  become: no
 
 
 - name: Clone or update dotfiles_stow Git repository into gits folder
@@ -15,6 +14,6 @@
     dest: /home/{{ ansible_user }}/gits/Debian-Hyprland
     version: main
     update: yes
-  become: no
+  become_user: "{{ ansible_user }}"
 
 ...

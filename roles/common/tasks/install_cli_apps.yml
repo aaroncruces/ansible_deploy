@@ -3,6 +3,7 @@
   package:
     name:
       - htop
+      - btop
       - git
       - nano
       - zsh
@@ -20,5 +21,10 @@
       - gamemode
       - gvfs
       - gvfs-backends
+      - firmware-linux
+      - python3-btrfsutil
+      - gawk 
+      - inotify-tools
+      - make
     state: present
 ...

@@ -8,6 +8,9 @@
 - name: stow
   include_tasks: stow.yml
 
-- name: update debian
-  include_tasks: bookworm_to_trixie.yml
+# - name: update debian
+#   include_tasks: bookworm_to_trixie.yml
+
+# - name: gits manual
+#   include_tasks: gits_manual.yml
 ...

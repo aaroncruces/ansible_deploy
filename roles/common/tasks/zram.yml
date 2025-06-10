@@ -28,11 +28,21 @@
     name: zram-tools
     state: present
 
-- name: Restart zramswap service
-  ansible.builtin.systemd_service:
-    name: zramswap.service
-    state: "restarted"
-    enabled: true
-  changed_when: false
+- name: Reload systemd daemon
+  systemd:
+    daemon_reload: yes
+
+# - name: Reboot system for service
+#   ansible.builtin.reboot:
+#     reboot_timeout: 300
+#   become: yes
+#   when: nvidia_check.rc != 0
+
+# - name: Restart zramswap service
+#   ansible.builtin.systemd_service:
+#     name: zramswap.service
+#     state: "restarted"
+#     enabled: true
+#   changed_when: false
 
 ...

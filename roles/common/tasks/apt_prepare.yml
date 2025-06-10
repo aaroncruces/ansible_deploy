@@ -2,7 +2,6 @@
 - name: Remove dpkg lock file
   ansible.builtin.command:
     cmd: rm -f /var/lib/dpkg/lock-frontend
-  become: yes
   ignore_errors: yes  # Continue even if the file doesn't exist or can't be removed
   changed_when: false
 
@@ -11,31 +10,22 @@
     path: /etc/apt/sources.list
     regexp: '^deb cdrom:'
     state: absent
-  become: yes
 
 - name: Update apt cache
   ansible.builtin.apt:
     update_cache: yes
-  become: yes
 
 - name: Upgrade all packages
   ansible.builtin.apt:
     upgrade: dist
-  become: yes
 
 - name: Remove unused packages
   ansible.builtin.apt:
     autoremove: yes
-  become: yes
 
 - name: Clean up unused dependency packages
   ansible.builtin.apt:
     autoclean: yes
-  become: yes
 
-# - name: Clean apt cache
-#   ansible.builtin.apt:
-#     clean: yes
-#   become: yes
-#   changed_when: false
+
 ...

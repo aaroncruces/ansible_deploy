@@ -17,7 +17,6 @@
     mode: '0755'
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"
-  become: no
 
 - name: Check if stowed file exists
   ansible.builtin.find:
@@ -39,11 +38,12 @@
     dest: /home/{{ ansible_user }}/gits/dotfiles_stow
     version: master
     update: yes
-  become: no
+  become_user: "{{ ansible_user }}"
+
 
 - name: install, execute stow install desktop
-  become_user: "{{ ansible_user }}"
   shell:
     cmd: /home/{{ ansible_user }}/gits/dotfiles_stow/stow_install_desktop.sh
   changed_when: false
+  become_user: "{{ ansible_user }}"
 ...

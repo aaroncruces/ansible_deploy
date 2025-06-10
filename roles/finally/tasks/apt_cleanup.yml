@@ -1,0 +1,12 @@
+---
+- name: Call apt prepare to update
+  include_role:
+    name: common
+    tasks_from: apt_prepare.yml
+    
+- name: Clean apt cache
+  ansible.builtin.apt:
+    clean: yes
+  become: yes
+  changed_when: false
+...

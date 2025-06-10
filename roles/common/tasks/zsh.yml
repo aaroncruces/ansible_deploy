@@ -28,6 +28,7 @@
     dest: "/home/{{ ansible_user }}/gits/antidote"
     depth: 1
   when: not antidote_dir.stat.exists
+  become_user: "{{ ansible_user }}"
 
 - name: Check if Oh My Posh is installed
   stat:
@@ -40,15 +41,12 @@
   apt:
     name: unzip
     state: present
-  when: not omp_check.stat.exists
-  become_user: "{{ ansible_user }}"
 
 - name: Download Oh My Posh installer
   get_url:
     url: https://ohmyposh.dev/install.sh
     dest: "/home/{{ ansible_user }}/gits/ohmyposh_install.sh"
     mode: '0755'
-  when: not omp_check.stat.exists
   become_user: "{{ ansible_user }}"
 
 - name: Install Oh My Posh
