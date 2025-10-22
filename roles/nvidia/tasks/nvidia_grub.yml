@@ -1,0 +1,31 @@
+# roles/enable_nvidia_grub/tasks/main.yml
+---
+- name: Check if NVIDIA parameters are already in GRUB config
+  command: grep -q "{{ nvidia_grub_params }}" /etc/default/grub
+  register: nvidia_check_config
+  ignore_errors: true
+  changed_when: false
+
+- name: Ensure GRUB config file exists
+  file:
+    path: /etc/default/grub
+    state: touch
+  when: nvidia_check_config.rc != 0
+
+- name: Append NVIDIA parameters to GRUB_CMDLINE_LINUX_DEFAULT if not present
+  lineinfile:
+    path: /etc/default/grub
+    regexp: '^GRUB_CMDLINE_LINUX_DEFAULT="(.*)"$'
+    line: 'GRUB_CMDLINE_LINUX_DEFAULT="\1 {{ nvidia_grub_params }}"'
+    backrefs: yes
+  when: nvidia_check_config.rc != 0
+  notify: Update GRUB
+
+- name: Flush handlers to apply GRUB update immediately
+  meta: flush_handlers
+  when: nvidia_check_config.rc != 0
+
+- name: Reboot the system if requested
+  reboot:
+    reboot_timeout: "{{ nvidia_reboot_timeout }}"
+  when: nvidia_check_config.rc != 0 and nvidia_reboot_after

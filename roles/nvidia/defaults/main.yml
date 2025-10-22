@@ -1,0 +1,7 @@
+# roles/enable_intel_iommu/defaults/main.yml
+---
+# Default variables; override in inventory or playbook
+nvidia_grub_params: "rd.driver.blacklist=nouveau modprobe.blacklist=nouveau nouveau.modeset=0 nvidia-drm.modeset=1"  # Common parameters: disable Nouveau and enable NVIDIA DRM modeset
+nvidia_reboot_after: false  # Set to true to reboot automatically
+nvidia_reboot_timeout: 300
+...

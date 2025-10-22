@@ -1,0 +1,32 @@
+# roles/enable_intel_iommu/tasks/main.yml
+---
+- name: Check if IOMMU parameters are already in GRUB config
+  command: grep -q "{{ iommu_grub_params }}" /etc/default/grub
+  register: iommu_check_config
+  ignore_errors: true
+  changed_when: false
+
+- name: Ensure GRUB config file exists
+  file:
+    path: /etc/default/grub
+    state: touch
+  when: iommu_check_config.rc != 0
+
+- name: Append IOMMU parameters to GRUB_CMDLINE_LINUX_DEFAULT if not present
+  lineinfile:
+    path: /etc/default/grub
+    regexp: '^GRUB_CMDLINE_LINUX_DEFAULT="(.*)"$'
+    line: 'GRUB_CMDLINE_LINUX_DEFAULT="\1 {{ iommu_grub_params }}"'
+    backrefs: yes
+  when: iommu_check_config.rc != 0
+  notify: Update GRUB
+
+- name: Flush handlers to apply GRUB update immediately
+  meta: flush_handlers
+  when: iommu_check_config.rc != 0
+
+- name: Reboot the system if requested
+  reboot:
+    reboot_timeout: "{{ iommu_reboot_timeout }}"
+  when: iommu_check_config.rc != 0 and iommu_reboot_after
+...

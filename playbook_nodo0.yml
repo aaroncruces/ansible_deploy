@@ -7,6 +7,8 @@
   gather_facts: true
   roles:
     # - common
-    # - nvidia
-    - proxmox
+    - nvidia
+    # - proxmox
+    - intel
+    # - finally
   

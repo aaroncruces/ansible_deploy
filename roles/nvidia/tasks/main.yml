@@ -1,6 +1,9 @@
 ---
-- name: nvidia driver
-  include_tasks: nvidia.yml
+- name: nvidia install
+  include_tasks: nvidia_install.yml
 
 - name: nvidia container toolkit
   include_tasks: nvidia_container_toolkit.yml
+
+- name: nvidia grub
+  include_tasks: nvidia_grub.yml

@@ -32,9 +32,6 @@
 - name: fonts for terminal apps
   include_tasks: fonts.yml
 
-- name: zfs driver
-  include_tasks: zfs.yml
-
 - name: zram
   include_tasks: zram.yml
 

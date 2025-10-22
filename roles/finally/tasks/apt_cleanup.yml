@@ -7,6 +7,6 @@
 - name: Clean apt cache
   ansible.builtin.apt:
     clean: yes
-  become: yes
+  become: true
   changed_when: false
 ...

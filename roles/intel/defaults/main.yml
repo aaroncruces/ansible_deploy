@@ -1,0 +1,6 @@
+# roles/enable_intel_iommu/defaults/main.yml
+---
+iommu_grub_params: "intel_iommu=on iommu=pt"  # Parameters to append for IOMMU
+iommu_reboot_after: false  # Set to true to reboot automatically
+iommu_reboot_timeout: 300
+...
