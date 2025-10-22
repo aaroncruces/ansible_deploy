@@ -5,135 +5,135 @@
   ignore_errors: true
   changed_when: false
 
-# - name: Remove all Proxmox-related sources
-#   shell: rm -f /etc/apt/sources.list.d/*pve* /etc/apt/sources.list.d/*proxmox*
-#   when: proxmox_check.rc != 0
-#   changed_when: true
+- name: Remove all Proxmox-related sources
+  shell: rm -f /etc/apt/sources.list.d/*pve* /etc/apt/sources.list.d/*proxmox*
+  when: proxmox_check.rc != 0
+  changed_when: true
 
-# - name: Remove all Proxmox-related keys
-#   shell: rm -f /etc/apt/keyrings/*proxmox* /usr/share/keyrings/*proxmox* /etc/apt/trusted.gpg.d/*proxmox* /var/lib/apt/lists/*proxmox*
-#   when: proxmox_check.rc != 0
-#   changed_when: true
+- name: Remove all Proxmox-related keys
+  shell: rm -f /etc/apt/keyrings/*proxmox* /usr/share/keyrings/*proxmox* /etc/apt/trusted.gpg.d/*proxmox* /var/lib/apt/lists/*proxmox*
+  when: proxmox_check.rc != 0
+  changed_when: true
 
-# - name: Clean APT cache and lists
-#   shell: apt clean && apt autoclean && rm -rf /var/lib/apt/lists/*
-#   when: proxmox_check.rc != 0
-#   environment:
-#     DEBIAN_FRONTEND: noninteractive
+- name: Clean APT cache and lists
+  shell: apt clean && apt autoclean && rm -rf /var/lib/apt/lists/*
+  when: proxmox_check.rc != 0
+  environment:
+    DEBIAN_FRONTEND: noninteractive
 
-# - name: Install required packages for Proxmox
-#   apt:
-#     name:
-#       - ca-certificates
-#       - curl
-#       - gnupg
-#       - wget
-#     state: present
-#   when: proxmox_check.rc != 0
-#   environment:
-#     DEBIAN_FRONTEND: noninteractive
+- name: Install required packages for Proxmox
+  apt:
+    name:
+      - ca-certificates
+      - curl
+      - gnupg
+      - wget
+    state: present
+  when: proxmox_check.rc != 0
+  environment:
+    DEBIAN_FRONTEND: noninteractive
 
-# - name: Download Proxmox VE archive keyring
-#   get_url:
-#     url: https://enterprise.proxmox.com/debian/proxmox-archive-keyring-trixie.gpg
-#     dest: /usr/share/keyrings/proxmox-archive-keyring.gpg
-#     mode: '0644'
-#   when: proxmox_check.rc != 0
+- name: Download Proxmox VE archive keyring
+  get_url:
+    url: https://enterprise.proxmox.com/debian/proxmox-archive-keyring-trixie.gpg
+    dest: /usr/share/keyrings/proxmox-archive-keyring.gpg
+    mode: '0644'
+  when: proxmox_check.rc != 0
 
-# - name: Add Proxmox VE no-subscription repository (deb822 format)
-#   copy:
-#     dest: /etc/apt/sources.list.d/pve-install-repo.sources
-#     content: |
-#       Types: deb
-#       URIs: http://download.proxmox.com/debian/pve
-#       Suites: {{ ansible_distribution_release }}
-#       Components: pve-no-subscription
-#       Signed-By: /usr/share/keyrings/proxmox-archive-keyring.gpg
-#   when: proxmox_check.rc != 0
+- name: Add Proxmox VE no-subscription repository (deb822 format)
+  copy:
+    dest: /etc/apt/sources.list.d/pve-install-repo.sources
+    content: |
+      Types: deb
+      URIs: http://download.proxmox.com/debian/pve
+      Suites: {{ ansible_distribution_release }}
+      Components: pve-no-subscription
+      Signed-By: /usr/share/keyrings/proxmox-archive-keyring.gpg
+  when: proxmox_check.rc != 0
 
-# - name: Update repositories (ignore errors after cleanup)
-#   apt:
-#     update_cache: yes
-#   when: proxmox_check.rc != 0
-#   ignore_errors: true
-#   environment:
-#     DEBIAN_FRONTEND: noninteractive
+- name: Update repositories (ignore errors after cleanup)
+  apt:
+    update_cache: yes
+  when: proxmox_check.rc != 0
+  ignore_errors: true
+  environment:
+    DEBIAN_FRONTEND: noninteractive
 
-# - name: Full system upgrade
-#   apt:
-#     upgrade: full
-#   when: proxmox_check.rc != 0
-#   environment:
-#     DEBIAN_FRONTEND: noninteractive
+- name: Full system upgrade
+  apt:
+    upgrade: full
+  when: proxmox_check.rc != 0
+  environment:
+    DEBIAN_FRONTEND: noninteractive
 
-# - name: Install Proxmox default kernel
-#   apt:
-#     name: proxmox-default-kernel
-#     state: present
-#   when: proxmox_check.rc != 0
-#   environment:
-#     DEBIAN_FRONTEND: noninteractive
-#   notify: reboot system
+- name: Install Proxmox default kernel
+  apt:
+    name: proxmox-default-kernel
+    state: present
+  when: proxmox_check.rc != 0
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+  notify: reboot system
 
-# - name: Install Proxmox VE packages
-#   apt:
-#     name:
-#       - proxmox-ve
-#       - postfix
-#       - open-iscsi
-#       - chrony
-#       - ifupdown2
-#     state: present
-#   when: proxmox_check.rc != 0
-#   environment:
-#     DEBIAN_FRONTEND: noninteractive
+- name: Install Proxmox VE packages
+  apt:
+    name:
+      - proxmox-ve
+      - postfix
+      - open-iscsi
+      - chrony
+      - ifupdown2
+    state: present
+  when: proxmox_check.rc != 0
+  environment:
+    DEBIAN_FRONTEND: noninteractive
 
-# - name: Disable Proxmox Enterprise repository
-#   lineinfile:
-#     path: /etc/apt/sources.list.d/pve-enterprise.list
-#     regexp: '^deb'
-#     line: '#deb https://enterprise.proxmox.com/debian/pve {{ ansible_distribution_release }} pve-enterprise'
-#     create: true
-#   when: proxmox_check.rc != 0
+- name: Disable Proxmox Enterprise repository
+  lineinfile:
+    path: /etc/apt/sources.list.d/pve-enterprise.list
+    regexp: '^deb'
+    line: '#deb https://enterprise.proxmox.com/debian/pve {{ ansible_distribution_release }} pve-enterprise'
+    create: true
+  when: proxmox_check.rc != 0
 
-# - name: Purge ZFS DKMS if not needed
-#   apt:
-#     name: zfs-dkms
-#     state: absent
-#     purge: yes
-#     autoremove: yes
-#   when: proxmox_check.rc != 0
-#   environment:
-#     DEBIAN_FRONTEND: noninteractive
+- name: Purge ZFS DKMS if not needed
+  apt:
+    name: zfs-dkms
+    state: absent
+    purge: yes
+    autoremove: yes
+  when: proxmox_check.rc != 0
+  environment:
+    DEBIAN_FRONTEND: noninteractive
 
-# - name: Remove Debian kernel
-#   apt:
-#     name:
-#       - linux-image-amd64
-#       - 'linux-image-*'
-#     state: absent
-#   when: proxmox_check.rc != 0
-#   environment:
-#     DEBIAN_FRONTEND: noninteractive
+- name: Remove Debian kernel
+  apt:
+    name:
+      - linux-image-amd64
+      - 'linux-image-*'
+    state: absent
+  when: proxmox_check.rc != 0
+  environment:
+    DEBIAN_FRONTEND: noninteractive
 
-# - name: Update GRUB
-#   command: update-grub
-#   when: proxmox_check.rc != 0
+- name: Update GRUB
+  command: update-grub
+  when: proxmox_check.rc != 0
 
-# - name: Remove os-prober package
-#   apt:
-#     name: os-prober
-#     state: absent
-#   when: proxmox_check.rc != 0
-#   environment:
-#     DEBIAN_FRONTEND: noninteractive
+- name: Remove os-prober package
+  apt:
+    name: os-prober
+    state: absent
+  when: proxmox_check.rc != 0
+  environment:
+    DEBIAN_FRONTEND: noninteractive
 
-# - name: Configure hosts file
-#   template:
-#     src: hosts.j2
-#     dest: /etc/hosts
-#     backup: yes
-#   when: proxmox_check.rc != 0
+- name: Configure hosts file
+  template:
+    src: hosts.j2
+    dest: /etc/hosts
+    backup: yes
+  when: proxmox_check.rc != 0
 
 - name: Set network variables
   set_fact:
