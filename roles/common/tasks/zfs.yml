@@ -1,9 +1,30 @@
 ---
+- name: Check if distribution is Debian Bookworm
+  ansible.builtin.shell: grep -E '^VERSION_CODENAME=bookworm$' /etc/os-release
+  register: distro_check
+  changed_when: false
+  ignore_errors: true
+
+- name: Set fact for Bookworm check
+  ansible.builtin.set_fact:
+    is_bookworm: "{{ distro_check.rc == 0 }}"
+
+- name: Check if distribution is Debian Trixie
+  ansible.builtin.shell: grep -E '^VERSION_CODENAME=trixie$' /etc/os-release
+  register: trixie_check
+  changed_when: false
+  ignore_errors: true
+
+- name: Set fact for Trixie check
+  ansible.builtin.set_fact:
+    is_trixie: "{{ trixie_check.rc == 0 }}"
+
 - name: Add backports repository
   apt_repository:
     repo: "deb http://deb.debian.org/debian {{ ansible_distribution_release }}-backports main contrib non-free"
     state: present
     filename: backports
+  when: not is_trixie
 
 - name: Update apt cache
   apt:
@@ -22,28 +43,15 @@
     state: present
     update_cache: true
 
-- name: Check if distribution is Debian Bookworm
-  ansible.builtin.shell: grep -E '^VERSION_CODENAME=bookworm$' /etc/os-release
-  register: distro_check
-  changed_when: false
-  ignore_errors: yes
-
-- name: Set fact for Bookworm check
-  ansible.builtin.set_fact:
-    is_bookworm: "{{ distro_check.rc == 0 }}"
-
-- name: Check if distribution is Debian Trixie
-  ansible.builtin.shell: grep -E '^VERSION_CODENAME=trixie$' /etc/os-release
-  register: trixie_check
-  changed_when: false
-  ignore_errors: yes
-
-- name: Set fact for Trixie check
-  ansible.builtin.set_fact:
-    is_trixie: "{{ trixie_check.rc == 0 }}"
+- name: Ensure contrib section is available for Trixie
+  apt_repository:
+    repo: "deb http://deb.debian.org/debian {{ ansible_distribution_release }} main contrib non-free"
+    state: present
+    filename: main-contrib
+  when: is_trixie
 
 
-- name: Install required packages
+- name: Install ZFS packages from backports (Bookworm)
   apt:
     name:
       - zfsutils-linux
@@ -53,8 +61,7 @@
   register: zfs_installed
   when: is_bookworm
 
-
-- name: Install required packages
+- name: Install ZFS packages from main repository (Trixie)
   apt:
     name:
       - zfsutils-linux

@@ -1,4 +1,6 @@
 ---
 - name: nvidia driver
   include_tasks: nvidia.yml
-...
+
+- name: nvidia container toolkit
+  include_tasks: nvidia_container_toolkit.yml

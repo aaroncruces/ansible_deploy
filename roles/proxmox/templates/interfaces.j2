@@ -1,0 +1,16 @@
+auto lo
+iface lo inet loopback
+
+source /etc/network/interfaces.d/*
+
+iface {{ physical_interface }} inet manual
+
+auto vmbr0
+iface vmbr0 inet static
+    address {{ ansible_host }}/{{ subnet_mask }}
+    gateway {{ gateway }}
+    bridge-ports {{ physical_interface }}
+    bridge-stp off
+    bridge-fd 0
+    dns-nameservers {{ dns_servers | join(' ') }}
+

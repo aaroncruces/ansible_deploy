@@ -1,46 +1,41 @@
 ---
-# - name: Prepare apt to installs
-#   include_tasks: apt_prepare.yml
+- name: Prepare apt to installs
+  include_tasks: apt_prepare.yml
 
-# - name: Include common cli apps
-#   include_tasks: install_cli_apps.yml
+- name: Include common cli apps
+  include_tasks: install_cli_apps.yml
 
-# - name: Include common gui apps
-#   include_tasks: install_gui_apps.yml
+- name: Docker
+  include_tasks: docker.yml
 
-# - name: Docker
-#   include_tasks: docker.yml
+- name: flatpak
+  include_tasks: flatpak.yml
 
-# - name: Edit user properties
-#   include_tasks: user.yml
+- name: Edit user properties
+  include_tasks: user.yml
 
-# - name: Install Zsh
-#   include_tasks: zsh.yml
+- name: Install Zsh
+  include_tasks: zsh.yml
 
 - name: stow dotfiles common
   include_tasks: stow.yml
 
-# - name: tmux
-#   include_tasks: tmux.yml
+- name: tmux
+  include_tasks: tmux.yml
 
-# - name: neovim
-#   include_tasks: neovim.yml
+- name: neovim
+  include_tasks: neovim.yml
 
-# - name: autologin using systemd
-#   include_tasks: autologin.yml
+- name: autologin using systemd
+  include_tasks: autologin.yml
 
-# - name: fonts for terminal apps
-#   include_tasks: fonts.yml
+- name: fonts for terminal apps
+  include_tasks: fonts.yml
 
-# - name: zfs driver
-#   include_tasks: zfs.yml
+- name: zfs driver
+  include_tasks: zfs.yml
 
-# - name: zram
-#   include_tasks: zram.yml
+- name: zram
+  include_tasks: zram.yml
 
-# - name: snapper
-#   include_tasks: snapper.yml
-
-# - name: flatpak
-#   include_tasks: flatpak.yml
 ...

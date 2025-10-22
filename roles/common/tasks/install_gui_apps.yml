@@ -1,8 +1,0 @@
----
-- name: Install gui packages
-  package:
-    name:
-      - snapper
-      - timeshift
-    state: present
-...

@@ -10,5 +10,5 @@
     name: flathub
     state: present
     flatpakrepo_url: https://flathub.org/repo/flathub.flatpakrepo
-  become: yes
+  become: true
 ...

@@ -2,35 +2,6 @@
 - name: apt cleanup
   include_tasks: apt_cleanup.yml
 
-- name: snapper_snapshot
-  include_tasks: snapper_snapshot.yml
+# - name: snapper_snapshot
+#   include_tasks: snapper_snapshot.yml
 ...
-
-[ERROR] failed to install. Please check the install.log. You may need to install it manually. Sorry, I have tried :(
-[INFO] Installing  ●○○○○○○○[INFO] Installing libhyprlang-dev ... Done!                     
-[ERROR] libhyprlang-dev failed to install. Please check the install.log. You may need to install it manually. Sorry, I have tried :(
-[INFO] Installing libhyprutils-dev ●○○○○○○[INFO] Installing libhyprutils-dev ... Done!                     
-[ERROR]  failed to install. Please check the install.log. You may need to install it manually. Sorry, I have tried :(
-[INFO] Installing libpam0g-dev ... Done!                     
-[OK] Package libpam0g-dev has been successfully installed!
-[INFO] Installing hyprcursor-util ... Done!                     
-[ERROR] failed to install. Please check the install.log. You may need to install it manually. Sorry, I have tried :(
-
-
-hyprland-protocols
-hyprwayland-scanner
-hyprland
-
-Rust is installed now. Great!
-
-To get started you may need to restart your current shell.
-This would reload your PATH environment variable to include
-Cargo's bin directory ($HOME/.cargo/bin).
-
-To configure your current shell, you need to source
-the corresponding env file under $HOME/.cargo.
-
-This is usually done by running one of the following (note the leading DOT):
-. "$HOME/.cargo/env"            # For sh/bash/zsh/ash/dash/pdksh
-source "$HOME/.cargo/env.fish"  # For fish
-source $"($nu.home-path)/.cargo/env.nu"  # For nushell

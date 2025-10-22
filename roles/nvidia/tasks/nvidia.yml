@@ -33,7 +33,8 @@
       - nvidia-vaapi-driver
       - nvidia-settings
     state: present
-  become: yes
+  become: true
+  register: nvidia_packages_installed
   when: nvidia_check.rc != 0
 
 - name: Create blacklist-nouveau.conf to disable Nouveau
@@ -45,19 +46,18 @@
     owner: root
     group: root
     mode: '0644'
-  become: yes
+  become: true
   when: nvidia_check.rc != 0
 
 - name: Regenerate initramfs to apply Nouveau blacklist
   ansible.builtin.command:
     cmd: update-initramfs -u
-  become: yes
+  become: true
   when: nvidia_check.rc != 0
   changed_when: false
 
 - name: Reboot system after NVIDIA driver installation
   ansible.builtin.reboot:
     reboot_timeout: 300
-  become: yes
-  when: nvidia_check.rc != 0
-...
+  become: true
+  when: nvidia_packages_installed is defined and nvidia_packages_installed.changed

@@ -1,0 +1,6 @@
+- name: reboot system
+  reboot:
+    reboot_timeout: 300
+
+- name: reload networking
+  command: ifreload -a

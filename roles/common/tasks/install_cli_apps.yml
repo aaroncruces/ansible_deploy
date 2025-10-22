@@ -27,7 +27,7 @@
       - inotify-tools
       - make
       - ntfs-3g
-      - software-properties-common
+      #- software-properties-common
       - python3-launchpadlib
       - yt-dlp 
     state: present
