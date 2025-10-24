@@ -73,6 +73,13 @@
   when: proxmox_check.rc != 0
   environment:
     DEBIAN_FRONTEND: noninteractive
+
+- name: Install Proxmox headers for current kernel
+  apt:
+    name: "proxmox-headers-{{ kernel_version.stdout }}"
+    state: present
+    update_cache: true
+  when: nvidia_check.rc != 0
   notify: reboot system
 
 - name: Install Proxmox VE packages
