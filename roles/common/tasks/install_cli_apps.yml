@@ -30,5 +30,7 @@
       #- software-properties-common
       - python3-launchpadlib
       - yt-dlp 
+      - smartmontools
+      - hdparm
     state: present
 ...

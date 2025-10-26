@@ -1,0 +1,14 @@
+---
+
+- name: Configure remote server
+  hosts: nodo0
+  become: true
+  become_method: sudo  
+  gather_facts: true
+  roles:
+    - common
+    - nvidia
+    # - proxmox
+    - intel
+    # - finally
+  

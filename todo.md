@@ -34,3 +34,4 @@
 - optimize bootstrap for  nopass (maybe create nopass if doesnt exist?)
 - go step by step tasks
 - fix apt sources.lists errors on tasks
+- usbcore.autosuspend=-1"

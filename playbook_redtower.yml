@@ -1,13 +1,12 @@
 ---
 
 - name: Configure remote server
-  hosts: nodo0
+  hosts: redtower
   become: true
   become_method: sudo  
   gather_facts: true
   roles:
     # - common
-    - nvidia
     # - proxmox
     - intel
     # - finally

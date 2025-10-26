@@ -12,7 +12,7 @@
     line: 'ALGO=lz4'
     state: present
     mode: '0644'
-  notify: Restart zramswap service
+  # notify: Restart zramswap service
 
 - name: Ensure zRAM percentage is set
   ansible.builtin.lineinfile:
@@ -21,7 +21,7 @@
     line: 'PERCENT=25'
     state: present
     mode: '0644'
-  notify: Restart zramswap service
+  # notify: Restart zramswap service
 
 - name: Ensure zram-tools is installed
   ansible.builtin.package:
