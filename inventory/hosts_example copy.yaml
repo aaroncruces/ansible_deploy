@@ -1,8 +1,11 @@
 ---
 all:
   hosts:
-    remote:
+    myhost:
       ansible_host: 192.168.1.111
+      dns_servers:
+        - 1.1.1.1
+        - 192.168.1.1
       ansible_port: 111
       ansible_user: user
       ansible_become: true
@@ -10,3 +13,4 @@ all:
       ansible_ssh_private_key_file: ~/.ssh/id_ed25519
       ansible_python_interpreter: /usr/bin/python3.11
       ansible_ssh_passphrase: ""
+      ansible_new_user: 

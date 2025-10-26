@@ -7,13 +7,13 @@
 
 - name: Check if JetBrains fonts are already installed
   find:
-    paths: /home/{{ ansible_user }}/.local/share/fonts
+    paths: "{{ ansible_env.HOME }}/.local/share/fonts"
     patterns: "JetBrains*"
   register: jetbrains_fonts
 
 - name: Create fonts directory
   file:
-    path: /home/{{ ansible_user }}/.local/share/fonts
+    path: "{{ ansible_env.HOME }}/.local/share/fonts"
     state: directory
     mode: '0755'
     owner: "{{ ansible_user }}"
@@ -23,7 +23,7 @@
 - name: Download JetBrainsMono font
   get_url:
     url: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/JetBrainsMono.tar.xz
-    dest: /home/{{ ansible_user }}/gits/JetBrainsMono.tar.xz
+    dest: "{{ ansible_env.HOME }}/gits/JetBrainsMono.tar.xz"
     mode: '0644'
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"
@@ -31,8 +31,8 @@
 
 - name: Extract JetBrainsMono font
   unarchive:
-    src: /home/{{ ansible_user }}/gits/JetBrainsMono.tar.xz
-    dest: /home/{{ ansible_user }}/.local/share/fonts
+    src: "{{ ansible_env.HOME }}/gits/JetBrainsMono.tar.xz"
+    dest: "{{ ansible_env.HOME }}/.local/share/fonts"
     remote_src: yes
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"
@@ -40,7 +40,7 @@
 
 - name: Remove Windows fonts
   ansible.builtin.command:
-    cmd: rm -rvf /home/{{ ansible_user }}/.local/share/fonts/*Windows*
+    cmd: rm -rvf "{{ ansible_env.HOME }}/.local/share/fonts/*Windows*"
   ignore_errors: true
   when: jetbrains_fonts.matched == 0
 

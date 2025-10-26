@@ -6,20 +6,20 @@
 
 - name: Create ~/gits/tmux_plugins/ directory
   file:
-    path: "/home/{{ ansible_user }}/gits/tmux_plugins/"
+    path: "{{ ansible_env.HOME }}/gits/tmux_plugins/"
     state: directory
     mode: '0750'
   become_user: "{{ ansible_user }}"
 
 - name: Check if tpm is already installed
   stat:
-    path: "/home/{{ ansible_user }}/gits/tpm"
+    path: "{{ ansible_env.HOME }}/gits/tpm"
   register: tpm_dir
 
 - name: Install tpm in gits directory
   git:
     repo: https://github.com/tmux-plugins/tpm.git
-    dest: "/home/{{ ansible_user }}/gits/tpm"
+    dest: "{{ ansible_env.HOME }}/gits/tpm"
     depth: 1
     update: yes
   when: not tpm_dir.stat.exists

@@ -1,0 +1,4 @@
+---
+- name: docker install
+  include_tasks: docker_install.yml
+...

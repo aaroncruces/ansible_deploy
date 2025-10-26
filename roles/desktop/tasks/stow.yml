@@ -12,7 +12,7 @@
 
 - name: Ensure gits folder exists for the current user
   ansible.builtin.file:
-    path: /home/{{ ansible_user }}/gits
+    path: "{{ ansible_env.HOME }}/gits"
     state: directory
     mode: '0755'
     owner: "{{ ansible_user }}"
@@ -20,7 +20,7 @@
 
 - name: Check if stowed file exists
   ansible.builtin.find:
-    paths: /home/{{ ansible_user }}/.config
+    paths: "{{ ansible_env.HOME }}/.config"
     patterns: "stowed_desktop"
     file_type: any
   register: stowed_desktop
@@ -28,14 +28,14 @@
 - name: clenup, execute stow uninstall desktop
   become_user: "{{ ansible_user }}"
   shell:
-    cmd: /home/{{ ansible_user }}/gits/dotfiles_stow/stow_uninstall_desktop.sh
+    cmd: "{{ ansible_env.HOME }}/gits/dotfiles_stow/stow_uninstall_desktop.sh"
   when: stowed_desktop.matched == true
   changed_when: false
 
 - name: Clone or update dotfiles_stow Git repository into gits folder
   ansible.builtin.git:
     repo: 'https://github.com/aaroncruces/dotfiles_stow.git'
-    dest: /home/{{ ansible_user }}/gits/dotfiles_stow
+    dest: "{{ ansible_env.HOME }}/gits/dotfiles_stow"
     version: master
     update: yes
   become_user: "{{ ansible_user }}"
@@ -43,7 +43,7 @@
 
 - name: install, execute stow install desktop
   shell:
-    cmd: /home/{{ ansible_user }}/gits/dotfiles_stow/stow_install_desktop.sh
+    cmd: "{{ ansible_env.HOME }}/gits/dotfiles_stow/stow_install_desktop.sh"
   changed_when: false
   become_user: "{{ ansible_user }}"
 ...

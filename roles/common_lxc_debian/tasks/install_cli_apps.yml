@@ -1,0 +1,15 @@
+---
+- name: Install cli apps on apt (debian 13)
+  package:
+    name:
+      - git
+      - sudo
+      - nano
+      - build-essential
+      - cmake
+      - make
+      - rsync
+      - tmux
+      
+    state: present
+...

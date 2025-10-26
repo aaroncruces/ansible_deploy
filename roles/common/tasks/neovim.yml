@@ -11,28 +11,39 @@
       - build-essential
       - cmake
       - lua5.4
+      - sudo
     state: present
   when: nvim_check.rc != 0
+
+- name: Ensure gits folder exists for the current user
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/gits"
+    state: directory
+    mode: '0755'
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+
+
   
 - name: Clone neovim repository
   git:
     repo: https://github.com/neovim/neovim.git
-    dest: /home/{{ ansible_user }}/gits/neovim
+    dest: "{{ ansible_env.HOME }}/gits/neovim"
     version: stable
     update: yes
   become_user: "{{ ansible_user }}"
-  # when: nvim_check.rc != 0
+  when: nvim_check.rc != 0
 
 - name: Build neovim
   shell:
     cmd: make CMAKE_BUILD_TYPE=RelWithDebInfo
-    chdir: /home/{{ ansible_user }}/gits/neovim
+    chdir: "{{ ansible_env.HOME }}/gits/neovim"
   become_user: "{{ ansible_user }}"
   when: nvim_check.rc != 0
 
 - name: Install neovim
   shell:
     cmd: sudo make install
-    chdir: /home/{{ ansible_user }}/gits/neovim
+    chdir: "{{ ansible_env.HOME }}/gits/neovim"
   become: true
   when: nvim_check.rc != 0 

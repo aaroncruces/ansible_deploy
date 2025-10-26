@@ -1,0 +1,10 @@
+---
+- name: Prepare apt to installs
+  include_tasks: "{{ playbook_dir }}/roles/common/tasks/apt_prepare.yml"
+
+- name: Include common cli apps for lxc
+  include_tasks: install_cli_apps.yml
+
+- name: neovim
+  include_tasks: "{{ playbook_dir }}/roles/common/tasks/neovim.yml"
+...

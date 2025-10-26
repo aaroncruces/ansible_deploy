@@ -1,0 +1,11 @@
+---
+
+- name: Configure remote server
+  hosts: dockeronlxcred
+  gather_facts: true
+  roles:
+    - common_lxc_debian
+    - docker
+    - dockeronlxcred
+    
+  

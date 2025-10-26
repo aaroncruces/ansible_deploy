@@ -10,12 +10,12 @@
 
 - name: Check if RetroPie-Setup exists
   stat:
-    path: "/home/{{ ansible_user }}/gits/RetroPie-Setup"
+    path: "{{ ansible_env.HOME }}/gits/RetroPie-Setup"
   register: retropie_check
 
 - name: Clone RetroPie-Setup repository
   git:
     repo: https://github.com/RetroPie/RetroPie-Setup.git
-    dest: "/home/{{ ansible_user }}/gits/RetroPie-Setup"
+    dest: "{{ ansible_env.HOME }}/gits/RetroPie-Setup"
     depth: 1
   when: not retropie_check.stat.exists 

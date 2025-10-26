@@ -6,15 +6,15 @@
   become_user: "{{ ansible_user }}"
   changed_when: false
 
-- name: check if /home/{{ ansible_user }}/RetroPie exists
+- name: check if "{{ ansible_env.HOME }}/RetroPie exists"
   stat:
-    path: /home/{{ ansible_user }}/RetroPie
+    path: "{{ ansible_env.HOME }}/RetroPie"
   register: retropie_exists
   changed_when: false
 
-- name: link /opt/retropie/configs/all/ to /home/{{ ansible_user }}/RetroPie
+- name: link /opt/retropie/configs/all/ to "{{ ansible_env.HOME }}/RetroPie"
   file:
     src: /opt/retropie/configs/all/
-    dest: /home/{{ ansible_user }}/RetroPie/config_all
+    dest: "{{ ansible_env.HOME }}/RetroPie/config_all"
     state: link
   when: opt_all_exists.stat.exists == true and retropie_exists.stat.exists == true

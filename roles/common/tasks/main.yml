@@ -5,9 +5,6 @@
 - name: Include common cli apps
   include_tasks: install_cli_apps.yml
 
-- name: Docker
-  include_tasks: docker.yml
-
 - name: flatpak
   include_tasks: flatpak.yml
 

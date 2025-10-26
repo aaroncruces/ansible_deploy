@@ -1,0 +1,6 @@
+---
+- name: Prepare user on the lxc
+  include_tasks: user.yml
+
+
+...

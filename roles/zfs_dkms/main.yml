@@ -1,0 +1,4 @@
+---
+- name: zfs dkms install
+  include_tasks: zfs.yml
+...

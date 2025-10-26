@@ -21,7 +21,7 @@
 
 - name: Ensure gits folder exists for the current user
   ansible.builtin.file:
-    path: /home/{{ ansible_user }}/gits
+    path: "{{ ansible_env.HOME }}/gits"
     state: directory
     mode: '0755'
     owner: "{{ ansible_user }}"

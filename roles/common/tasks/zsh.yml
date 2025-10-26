@@ -19,20 +19,20 @@
 
 - name: Check if antidote is already installed
   stat:
-    path: "/home/{{ ansible_user }}/gits/antidote"
+    path: "{{ ansible_env.HOME }}/gits/antidote"
   register: antidote_dir
 
 - name: Install antidote
   git:
     repo: https://github.com/mattmc3/antidote.git
-    dest: "/home/{{ ansible_user }}/gits/antidote"
+    dest: "{{ ansible_env.HOME }}/gits/antidote"
     depth: 1
   when: not antidote_dir.stat.exists
   become_user: "{{ ansible_user }}"
 
 - name: Check if Oh My Posh is installed
   stat:
-    path: "/home/{{ ansible_user }}/gits/ohmyposh_install.sh"
+    path: "{{ ansible_env.HOME }}/gits/ohmyposh_install.sh"
   register: omp_check
   ignore_errors: true
   changed_when: false
@@ -45,18 +45,18 @@
 - name: Download Oh My Posh installer
   get_url:
     url: https://ohmyposh.dev/install.sh
-    dest: "/home/{{ ansible_user }}/gits/ohmyposh_install.sh"
+    dest: "{{ ansible_env.HOME }}/gits/ohmyposh_install.sh"
     mode: '0755'
   become_user: "{{ ansible_user }}"
 
 - name: Install Oh My Posh
-  command: bash /home/{{ ansible_user }}/gits/ohmyposh_install.sh
+  command: bash "{{ ansible_env.HOME }}/gits/ohmyposh_install.sh"
   when: not omp_check.stat.exists
   become_user: "{{ ansible_user }}"
 
 - name: Install Oh My Posh fonts
   shell:
-    cmd: /home/{{ ansible_user }}/.local/bin/oh-my-posh font install JetBrainsMono
+    cmd: "{{ ansible_env.HOME }}/.local/bin/oh-my-posh font install JetBrainsMono"
   become_user: "{{ ansible_user }}"
   when: not omp_check.stat.exists
 ...
