@@ -5,3 +5,4 @@ secrets.tfvars
 *tfstate*
 .terraform
 .terraform*
+ansible_vault_pass
