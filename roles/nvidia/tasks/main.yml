@@ -7,3 +7,7 @@
 
 - name: nvidia grub
   include_tasks: nvidia_grub.yml
+
+- name: nvidia extra packages
+  include_tasks: nvidia_extras.yml
+  

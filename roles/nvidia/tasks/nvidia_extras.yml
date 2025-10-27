@@ -1,0 +1,5 @@
+---
+- name: Install extra packages
+  package:
+    name:
+      - nvidia-cuda-toolkit
