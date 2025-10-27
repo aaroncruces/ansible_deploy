@@ -24,8 +24,21 @@ terraform {
   }
 }
 
+variable "pm_password" {
+  type        = string
+  sensitive   = true
+  description = "Root password for Proxmox"
+}
+
+# provider "proxmox" {
+#   endpoint  = "https://200.200.200.130:8006/"  # Your Proxmox API endpoint
+#   api_token = "${var.pm_api_token_id}=${var.pm_api_token_secret}"  # Combined format
+#   insecure  = true  # Skip TLS verification for self-signed certs
+# }
+
 provider "proxmox" {
-  endpoint  = "https://200.200.200.130:8006/"  # Your Proxmox API endpoint
-  api_token = "${var.pm_api_token_id}=${var.pm_api_token_secret}"  # Combined format
-  insecure  = true  # Skip TLS verification for self-signed certs
+  endpoint  = "https://200.200.200.130:8006/"
+  username  = "root@pam"
+  password  = var.pm_password
+  insecure  = true
 }

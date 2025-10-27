@@ -1,4 +1,4 @@
-resource "proxmox_virtual_environment_container" "docker_nvidia_lxc" {
+resource "proxmox_virtual_environment_container" "dockernvidialxcnodo0" {
   node_name   = "nodo0"
   vm_id       = 2002  # Unique ID; adjust to avoid conflicts
   description = "LXC for Docker with NVIDIA Container Toolkit"
@@ -6,7 +6,7 @@ resource "proxmox_virtual_environment_container" "docker_nvidia_lxc" {
   unprivileged = true  # Unprivileged for security; works with device passthrough
 
   initialization {
-    hostname = "docker-nvidia-lxc"
+    hostname = "dockernvidialxcnodo0"
     user_account {
       password = var.lxc_password
     }
@@ -64,21 +64,21 @@ resource "proxmox_virtual_environment_container" "docker_nvidia_lxc" {
     deny_write = false
   }
 
-  device_passthrough {
-    path       = "/dev/nvidia-uvm"
-    mode       = "0666"
-    uid        = 0
-    gid        = 0
-    deny_write = false
-  }
+  # device_passthrough {
+  #   path       = "/dev/nvidia-uvm"
+  #   mode       = "0666"
+  #   uid        = 0
+  #   gid        = 0
+  #   deny_write = false
+  # }
 
-  device_passthrough {
-    path       = "/dev/nvidia-uvm-tools"
-    mode       = "0666"
-    uid        = 0
-    gid        = 0
-    deny_write = false
-  }
+  # device_passthrough {
+  #   path       = "/dev/nvidia-uvm-tools"
+  #   mode       = "0666"
+  #   uid        = 0
+  #   gid        = 0
+  #   deny_write = false
+  # }
 
   device_passthrough {
     path       = "/dev/nvidia-modeset"
