@@ -17,6 +17,18 @@
   delegate_to: localhost
   register: tf_output
 
+- name: Run install ansible with Terraform for {{ hostname }}
+  cloud.terraform.terraform:
+    project_path: "{{ playbook_dir }}/terraform_run"
+    state: present
+    force_init: true
+    provider_upgrade: true
+    lock: true
+    targets:
+      - null_resource.install_ansible_{{ hostname }}
+  delegate_to: localhost
+  register: tf_output
+
 - name: Display Terraform output for Docker LXC
   ansible.builtin.debug:
     msg: "{{ tf_output }}"

@@ -1,9 +1,8 @@
 ---
-# temporarily disabled for debug
 # - name: Configure remote server
 #   hosts: nodo0
 #   become: true
-#   become_method: sudo  
+#   become_method: sudo
 #   gather_facts: true
 #   roles:
 #     # - common
@@ -21,6 +20,9 @@
     - host_vars/nodo0/vault.yml
   vars:
     proxmox_endpoint: "https://{{ ansible_host }}:8006/"
+    pm_password: "{{ ansible_become_password }}"
   roles:
-    - nodo0_terraform  # Optional: If structured as roles; otherwise use tasks below
+    - nodo0_create_tf_instances  # Optional: If structured as roles; otherwise use tasks below
+
+
 ...

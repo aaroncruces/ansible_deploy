@@ -1,21 +1,47 @@
 - name: Setup main.tf terraform script
   include_tasks: setup_main.yml
 
-- name: Get vars terraform dockeronlxc script
-  include_vars: vars/dockeronlxc.yml
+
+# - name: Get vars terraform dockeronlxc script
+#   include_vars: vars/dockeronlxc.yml
 
 - name: Run terraform dockeronlxc script
   include_tasks: launch_lxc.yml
   vars:
     template_tf: "dockeronlxc"
-
-- name: Get vars terraform dockernvidialxc script
-  include_vars: vars/dockernvidialxc.yml
+    vm_id: 2001
+    description: "LXC for Docker normal"
+    hostname: "dockeronlxcnodo0"
+    ip_address: "{{ hostvars['dockeronlxcnodo0']['ansible_host'] }}/{{ hostvars['dockeronlxcnodo0']['cidr'] }}"
+    gateway: "{{ hostvars['dockeronlxcnodo0']['gateway'] }}"
+    lxc_password: "{{ hostvars['dockeronlxcnodo0']['ansible_become_password'] }}"
+    cores: 16
+    memory_dedicated: 16384
+    swap: 1024
+    datastore_id: "local" # wiere is the hdd stored in the proxmox
+    disk_size: 32
+    bridge: "vmbr0"
+    template_file_id: "local:vztmpl/debian-13-standard_13.1-2_amd64.tar.zst"
+    os_type: "debian"
 
 - name: Run terraform  dockernvidialxc script
   include_tasks: launch_lxc.yml
   vars:
     template_tf: "dockernvidialxc"
+    vm_id: 2002
+    description: "LXC for Docker with NVIDIA Container Toolkit"
+    hostname: "dockernvidialxcnodo0"
+    ip_address: "{{ hostvars['dockernvidialxcnodo0']['ansible_host'] }}/{{ hostvars['dockernvidialxcnodo0']['cidr'] }}"
+    gateway: "{{ hostvars['dockernvidialxcnodo0']['gateway'] }}"
+    lxc_password: "{{ hostvars['dockernvidialxcnodo0']['ansible_become_password'] }}"
+    cores: 16
+    memory_dedicated: 16384
+    swap: 1024
+    datastore_id: "local" # wiere is the hdd stored in the proxmox
+    disk_size: 32
+    bridge: "vmbr0"
+    template_file_id: "local:vztmpl/debian-13-standard_13.1-2_amd64.tar.zst"
+    os_type: "debian"
 
 # - name: Clean the terraform folder
 #   include_tasks: cleanup.yml

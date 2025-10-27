@@ -1,0 +1,6 @@
+---
+collections:
+  - name: community.docker
+    version: "*"  # Or a specific version, e.g., "4.4.4"
+  - name: cloud.terraform
+    version: "*"  # Or a specific version, e.g., "1.1.0"

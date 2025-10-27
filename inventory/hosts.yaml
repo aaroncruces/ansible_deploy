@@ -5,3 +5,5 @@ all:
     redtower: {}
     nodo0: {}
     dockeronlxcred: {}
+    dockeronlxcnodo0: {}
+    dockernvidialxcnodo0: {}

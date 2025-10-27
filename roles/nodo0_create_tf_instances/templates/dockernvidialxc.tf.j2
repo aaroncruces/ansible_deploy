@@ -1,5 +1,5 @@
 resource "proxmox_virtual_environment_container" "{{ hostname }}" {
-  node_name = "{{ node_name }}"
+  node_name = "{{ inventory_hostname }}"
   vm_id = {{ vm_id }} # Unique ID; adjust to avoid conflicts
   description = "{{ description }}"
   started = true
@@ -88,5 +88,23 @@ resource "proxmox_virtual_environment_container" "{{ hostname }}" {
     uid = 0
     gid = 0
     deny_write = false
+  }
+}
+
+resource "null_resource" "install_ansible_{{ hostname }}" {
+  depends_on = [proxmox_virtual_environment_container.{{ hostname }}]
+
+  connection {
+    type     = "ssh"
+    user     = "root"
+    password = "{{ lxc_password }}"
+    host     = split("/", "{{ ip_address }}")[0]  # Extracts the IP from CIDR notation (e.g., 192.168.1.100 from 192.168.1.100/24)
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "apt update -y",
+      "apt install ansible -y"
+    ]
   }
 }
