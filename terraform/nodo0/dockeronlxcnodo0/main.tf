@@ -30,7 +30,7 @@ provider "proxmox" {
   insecure  = true  # Skip TLS verification for self-signed certs
 }
 
-resource "proxmox_virtual_environment_container" "terraexamplelxc" {
+resource "proxmox_virtual_environment_container" "dockeronlxcnodo0" {
   node_name   = "nodo0"
   vm_id       = 2001  # Optional; auto-assigned if omitted
   description = "Managed by Terraform"
@@ -38,7 +38,7 @@ resource "proxmox_virtual_environment_container" "terraexamplelxc" {
   unprivileged = true
 
   initialization {
-    hostname = "terraexamplelxc"
+    hostname = "dockeronlxcnodo0"
     user_account {
       password = var.lxc_password
     }
@@ -51,7 +51,7 @@ resource "proxmox_virtual_environment_container" "terraexamplelxc" {
   }
 
   cpu {
-    cores = 1
+    cores = 12
   }
 
   memory {
