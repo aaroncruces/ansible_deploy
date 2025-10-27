@@ -1,0 +1,22 @@
+- name: Ensure directory for pve-manager service override exists
+  ansible.builtin.file:
+    path: /etc/systemd/system/pve-manager.service.d
+    state: directory
+    mode: '0755'
+
+- name: Create nvidia-init.conf drop-in for pve-manager
+  ansible.builtin.copy:
+    dest: /etc/systemd/system/pve-manager.service.d/nvidia-init.conf
+    content: |
+      [Service]
+      ExecStartPre=/usr/bin/nvidia-smi
+    mode: '0644'
+
+- name: Reload systemd daemon
+  ansible.builtin.systemd_service:
+    daemon_reload: true
+
+# - name: Restart pve-manager service
+#   ansible.builtin.service:
+#     name: pve-manager
+#     state: restarted

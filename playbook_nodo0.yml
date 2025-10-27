@@ -6,9 +6,10 @@
   become_method: sudo  
   gather_facts: true
   roles:
-    - common
-    - nvidia
+    # - common
+    # - nvidia
     # - proxmox
-    - intel
+    # - intel
+    - nodo0
     # - finally
   

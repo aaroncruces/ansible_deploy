@@ -3,7 +3,7 @@ resource "proxmox_virtual_environment_container" "dockernvidialxcnodo0" {
   vm_id       = 2002  # Unique ID; adjust to avoid conflicts
   description = "LXC for Docker with NVIDIA Container Toolkit"
   started     = true
-  unprivileged = true  # Unprivileged for security; works with device passthrough
+  unprivileged = false  # Unprivileged for security; works with device passthrough
 
   initialization {
     hostname = "dockernvidialxcnodo0"
