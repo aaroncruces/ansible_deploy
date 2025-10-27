@@ -1,0 +1,22 @@
+- name: Setup main.tf terraform script
+  include_tasks: setup_main.yml
+
+- name: Get vars terraform dockeronlxc script
+  include_vars: vars/dockeronlxc.yml
+
+- name: Run terraform dockeronlxc script
+  include_tasks: launch_lxc.yml
+  vars:
+    template_tf: "dockeronlxc"
+
+- name: Get vars terraform dockernvidialxc script
+  include_vars: vars/dockernvidialxc.yml
+
+- name: Run terraform  dockernvidialxc script
+  include_tasks: launch_lxc.yml
+  vars:
+    template_tf: "dockernvidialxc"
+
+# - name: Clean the terraform folder
+#   include_tasks: cleanup.yml
+...

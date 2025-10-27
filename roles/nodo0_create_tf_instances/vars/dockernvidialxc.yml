@@ -1,0 +1,14 @@
+node_name: "nodo0"
+vm_id: 2002
+description: "LXC for Docker with NVIDIA Container Toolkit"
+hostname: "dockernvidialxcnodo0"
+ip_address: "200.200.200.143/24"
+gateway: "200.200.200.1"
+cores: 1
+memory_dedicated: 16384
+swap: 1024
+datastore_id: "local"
+disk_size: 32
+bridge: "vmbr0"
+template_file_id: "local:vztmpl/debian-13-standard_13.1-2_amd64.tar.zst"
+os_type: "debian"

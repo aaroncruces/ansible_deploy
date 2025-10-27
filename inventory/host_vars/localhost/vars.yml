@@ -1,0 +1,4 @@
+---
+ansible_connection: local  # Runs tasks locally without SSH
+#ansible_python_interpreter: /usr/bin/python3  # Or your local Python path
+...

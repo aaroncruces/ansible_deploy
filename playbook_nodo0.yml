@@ -1,15 +1,26 @@
 ---
+# temporarily disabled for debug
+# - name: Configure remote server
+#   hosts: nodo0
+#   become: true
+#   become_method: sudo  
+#   gather_facts: true
+#   roles:
+#     # - common
+#     # - nvidia
+#     # - proxmox
+#     # - intel
+#     - nodo0
+#     # - finally
 
-- name: Configure remote server
+- name: Deploy Proxmox LXCs with Terraform via Ansible
   hosts: nodo0
-  become: true
-  become_method: sudo  
-  gather_facts: true
+  connection: local
+  gather_facts: false
+  vars_files:
+    - host_vars/nodo0/vault.yml
+  vars:
+    proxmox_endpoint: "https://{{ ansible_host }}:8006/"
   roles:
-    # - common
-    # - nvidia
-    # - proxmox
-    # - intel
-    - nodo0
-    # - finally
-  
+    - nodo0_terraform  # Optional: If structured as roles; otherwise use tasks below
+...

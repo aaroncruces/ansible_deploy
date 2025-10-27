@@ -1,0 +1,15 @@
+terraform {
+  required_providers {
+    proxmox = {
+      source = "bpg/proxmox"
+      version = "~> 0.82.0" # Or latest
+    }
+  }
+}
+
+provider "proxmox" {
+  endpoint = "{{ proxmox_endpoint }}"  # Dynamic endpoint with IP from inventory
+  username = "root@pam"
+  password = "{{ pm_password }}"  # Injected directly from Ansible vault
+  insecure = true
+}
