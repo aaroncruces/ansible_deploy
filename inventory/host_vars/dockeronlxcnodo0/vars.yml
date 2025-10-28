@@ -9,4 +9,6 @@ ansible_port: 22
 ansible_user: ceim
 ansible_ssh_private_key_file: ~/.ssh/id_ed25519_nopass
 ansible_python_interpreter: /usr/bin/python3
+portainer_external_port: 9010
+portainer_url: "portainerlocal.ceim.cl"
 ...

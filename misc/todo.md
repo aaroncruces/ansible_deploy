@@ -35,4 +35,4 @@
 - go step by step tasks
 - fix apt sources.lists errors on tasks
 - usbcore.autosuspend=-1"
-- de-hardcode 
+- de-hardcode nodo0_lxc stuffs

@@ -1,61 +1,56 @@
 resource "proxmox_virtual_environment_container" "{{ hostname }}" {
+
   node_name = "{{ inventory_hostname }}"
   vm_id = {{ vm_id }} # Optional; auto-assigned if omitted
   description = "{{ description }}"
   started = true
   unprivileged = true
+
   initialization {
     hostname = "{{ hostname }}"
     user_account {
       password = "{{ lxc_password }}"
+      keys = [
+        {% for key in ssh_authorized_keys %}
+        "{{ key }}",
+        {% endfor %}
+      ]
     }
     ip_config {
       ipv4 {
-        address = "{{ ip_address }}" # Static IP in CIDR; for DHCP, change to "dhcp"
+        address = "{{ ip_address }}/{{ host_cidr}}" # Static IP in CIDR; for DHCP, change to "dhcp"
         gateway = "{{ gateway }}" # Optional: Your gateway IP (comment out or remove for DHCP)
       }
     }
   }
+
   cpu {
     cores = {{ cores }}
   }
+
   memory {
     dedicated = {{ memory_dedicated }} # 16 GB RAM (in MB)
     swap = {{ swap }} # 1 GB swap (in MB)
   }
+
   disk {
     datastore_id = "{{ datastore_id }}"
     size = {{ disk_size }} # 32 GB disk
   }
+
   features {
     nesting = true
   }
+
   network_interface {
     name = "eth0"
     bridge = "{{ bridge }}" # Your bridge (adjust if needed)
     enabled = true
   }
+
   operating_system {
     template_file_id = "{{ template_file_id }}"
     type = "{{ os_type }}"
   }
-}
 
-resource "null_resource" "install_ansible_{{ hostname }}" {
-  depends_on = [proxmox_virtual_environment_container.{{ hostname }}]
-
-  connection {
-    type     = "ssh"
-    user     = "root"
-    password = "{{ lxc_password }}"
-    host     = split("/", "{{ ip_address }}")[0]  
-  }
-
-  provisioner "remote-exec" {
-    inline = [
-      "touch /root/tst.txt",
-      "apt update -y",
-      "apt install ansible -y"
-    ]
-  }
 }

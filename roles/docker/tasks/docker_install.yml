@@ -1,5 +1,4 @@
 ---
-# TODO: TEST IF IT WORKS. see https://docs.docker.com/engine/install/debian/
 - name: Check if docker exists
   command: which docker
   register: docker_check
@@ -14,6 +13,7 @@
       - gnupg
     state: present
   when: docker_check.rc != 0
+  become: true
 
 - name: Create apt keyrings directory
   file:
@@ -21,6 +21,7 @@
     state: directory
     mode: '0755'
   when: docker_check.rc != 0
+  become: true
 
 - name: Download Docker's official GPG key
   get_url:
@@ -28,6 +29,7 @@
     dest: /etc/apt/keyrings/docker.asc
     mode: '0644'
   when: docker_check.rc != 0
+  become: true
 
 - name: Add Docker repository
   apt_repository:
@@ -35,6 +37,7 @@
     state: present
     filename: docker
   when: docker_check.rc != 0
+  become: true
 
 - name: Install Docker packages
   apt:
@@ -47,6 +50,7 @@
     state: present
     update_cache: yes
   when: docker_check.rc != 0
+  become: true
 
 - name: Add user to docker group
   user:
@@ -54,3 +58,12 @@
     groups: docker
     append: yes
   when: docker_check.rc != 0 
+  become: true
+
+- name: Ensure dockers folder exists for the current user
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/dockers"
+    state: directory
+    mode: '0755'
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"

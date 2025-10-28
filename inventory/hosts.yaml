@@ -1,9 +1,24 @@
 ---
 all:
-  hosts:
-    localhost: {}
-    redtower: {}
-    nodo0: {}
-    dockeronlxcred: {}
-    dockeronlxcnodo0: {}
-    dockernvidialxcnodo0: {}
+  children:
+    redtower_server:
+      hosts:
+        redtower: {}
+      children:
+        redtower_lxc:
+          hosts:
+            dockeronlxcred: {}
+
+    nodo0_lxc:
+      hosts:
+        nodo0: {}
+      children:
+        nodo0_containers:
+          hosts:
+            dockeronlxcnodo0: {}
+            dockernvidialxcnodo0: {}
+
+    localhost_group:
+      hosts:
+        localhost: {}
+...

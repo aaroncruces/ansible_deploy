@@ -1,0 +1,32 @@
+version: "3.3"
+services:
+  portainer:
+    ports:
+      #- '8022:8000'
+      #- '8021:9443'
+      - "{{ portainer_external_port }}:9000"  # e.g., 9010
+    container_name: portainer
+    restart: always
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "{{ ansible_env.HOME }}/dockers/portainer/data:/data" 
+    image: "portainer/portainer-ce"
+    security_opt:
+      - apparmor:unconfined
+    # TRAEFIK
+    networks:
+      - reverseproxynetwork
+    labels:
+      - "traefik.http.routers.portainer.rule=Host(`{{ portainer_url }}`)"  # e.g., portainerlocal.ceim.cl
+      - "traefik.http.services.portainer.loadbalancer.server.port=9000"
+      - "traefik.enable=true"
+      - "traefik.http.routers.portainer.tls=true"
+      - "traefik.http.routers.portainer.entrypoints=https"
+      - "traefik.http.routers.portainer.middlewares=authentik@file"
+
+networks:
+  reverseproxynetwork:
+    name: reverseproxynetwork
+    driver: bridge
+# reverseproxynetwork:
+#   external: true

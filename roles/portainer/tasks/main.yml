@@ -1,0 +1,4 @@
+---
+- name: portainer install
+  include_tasks: portainer.yml
+...

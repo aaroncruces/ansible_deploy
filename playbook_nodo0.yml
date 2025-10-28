@@ -1,28 +1,41 @@
 ---
-# - name: Configure remote server
+# - name: Configure nodo0
 #   hosts: nodo0
 #   become: true
 #   become_method: sudo
 #   gather_facts: true
 #   roles:
-#     # - common
-#     # - nvidia
-#     # - proxmox
-#     # - intel
+#     - common
+#     - nvidia
+#     - proxmox
+#     - intel
 #     - nodo0
-#     # - finally
+#     - finally
+  
+# - name: Create Instances on nodo0
+#   hosts: nodo0
+#   connection: local
+#   gather_facts: false
+#   vars_files:
+#     - host_vars/nodo0/vault.yml
+#   vars:
+#     proxmox_endpoint: "https://{{ ansible_host }}:8006/"
+#     pm_password: "{{ ansible_become_password }}"
+#   roles:
+#     - nodo0_create_tf_instances  
 
-- name: Deploy Proxmox LXCs with Terraform via Ansible
-  hosts: nodo0
-  connection: local
-  gather_facts: false
-  vars_files:
-    - host_vars/nodo0/vault.yml
-  vars:
-    proxmox_endpoint: "https://{{ ansible_host }}:8006/"
-    pm_password: "{{ ansible_become_password }}"
+# - name: Configure Instances on nodo0
+#   hosts: nodo0_containers
+#   become_method: ansible.builtin.sudo
+#   gather_facts: true
+#   roles:
+#     - common_lxc_debian
+#     - docker
+
+- name: Configure dockeronlxcnodo0 instance
+  hosts: dockeronlxcnodo0
+  become_method: sudo
+  gather_facts: true
   roles:
-    - nodo0_create_tf_instances  # Optional: If structured as roles; otherwise use tasks below
-
-
+    - portainer
 ...

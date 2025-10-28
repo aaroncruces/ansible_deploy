@@ -1,4 +1,6 @@
 ---
 - name: docker install
   include_tasks: docker_install.yml
+- name: portainer_agent install
+  include_tasks: portainer_agent.yml
 ...

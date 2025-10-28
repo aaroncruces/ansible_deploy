@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+
+set -e  # Exit on error for safety
+
+# Update and upgrade packages
+apt update -y
+apt upgrade -y
+
+# Install required packages
+apt install -y sudo ansible
+
+# Create the user with home directory and bash shell
+useradd -m -s /bin/bash {{ new_user }}
+
+# Add the user to the sudo group for sudo privileges
+usermod -aG sudo {{ new_user }}
+
+# Copy /root/.ssh to the new user's home and set ownership
+cp -r /root/.ssh /home/{{ new_user }}/
+chown -R {{ new_user }}:{{ new_user }} /home/{{ new_user }}/.ssh
+
+# Backup the original sshd_config
+cp /etc/ssh/sshd_config /etc/ssh/sshd_config.bak
+
+# Overwrite sshd_config with the exact specified lines
+cat << EOF > /etc/ssh/sshd_config
+Include /etc/ssh/sshd_config.d/*.conf
+
+PasswordAuthentication no
+PermitRootLogin no
+PubkeyAuthentication yes
+
+KbdInteractiveAuthentication no
+UsePAM yes
+X11Forwarding yes
+PrintMotd no
+AcceptEnv LANG LC_* COLORTERM NO_COLOR
+Subsystem sftp /usr/lib/openssh/sftp-server
+EOF
+
+# Restart SSH service (tries 'ssh' first, falls back to 'sshd')
+systemctl restart ssh || systemctl restart sshd0
+
+echo "{{ new_user }}:{{ lxc_password }}" | chpasswd

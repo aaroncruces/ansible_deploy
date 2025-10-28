@@ -1,0 +1,19 @@
+- name: Ensure portainer folder exists for the current user
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/dockers/portainer"
+    state: directory
+    mode: '0755'
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+
+- name: Template Docker Compose file for Portainer
+  ansible.builtin.template:
+    src: portainer_agent.yml.j2
+    dest: "{{ ansible_env.HOME }}/dockers/portainer/portainer_agent.yml" 
+    mode: '0644'
+
+- name: Deploy Portainer using Docker Compose
+  community.docker.docker_compose_v2:
+    project_src: "{{ ansible_env.HOME }}/dockers/portainer"
+    files: "portainer_agent.yml"
+    state: present

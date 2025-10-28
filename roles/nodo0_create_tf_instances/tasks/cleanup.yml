@@ -1,6 +1,0 @@
-- name: Delete terraform_run directory and all contents
-  ansible.builtin.file:
-    path: "{{ playbook_dir }}/terraform_run"
-    state: absent
-    recurse: yes
-  delegate_to: localhost
