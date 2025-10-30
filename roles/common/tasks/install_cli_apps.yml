@@ -32,5 +32,9 @@
       - yt-dlp 
       - smartmontools
       - hdparm
+      # - tzdata
+      # sudo dpkg-reconfigure tzdata
+      # sudo sh -c 'echo "$(readlink /etc/localtime | sed "s|^/usr/share/zoneinfo/||")" > /etc/timezone'
+      # 
     state: present
 ...
