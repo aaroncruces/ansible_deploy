@@ -32,6 +32,10 @@
       - yt-dlp 
       - smartmontools
       - hdparm
+      - libarchive-zip-perl # for crc32 hex
+      - cdrtools # para mkisofs
+      - duf
+      - ncdu
       # - tzdata
       # sudo dpkg-reconfigure tzdata
       # sudo sh -c 'echo "$(readlink /etc/localtime | sed "s|^/usr/share/zoneinfo/||")" > /etc/timezone'
