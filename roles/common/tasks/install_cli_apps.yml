@@ -36,6 +36,10 @@
       - cdrtools # para mkisofs
       - duf
       - ncdu
+      - wpasupplicant
+      - wireless-tools
+      - isc-dhcp-client
+      #- nfs-utils # is it available on debian?
       # - tzdata
       # sudo dpkg-reconfigure tzdata
       # sudo sh -c 'echo "$(readlink /etc/localtime | sed "s|^/usr/share/zoneinfo/||")" > /etc/timezone'
