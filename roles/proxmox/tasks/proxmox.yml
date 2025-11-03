@@ -92,6 +92,7 @@
   apt:
     name:
       - proxmox-ve
+      - pve-manager
       - postfix
       - open-iscsi
       - chrony

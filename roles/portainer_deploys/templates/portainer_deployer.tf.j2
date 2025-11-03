@@ -1,0 +1,29 @@
+terraform {
+  required_providers {
+    portainer = {
+      source  = "portainer/portainer"
+      version = "~> {{ portainer_provider_version | default('1.15') }}"
+    }
+  }
+}
+
+provider "portainer" {
+  endpoint     = "http://{{ ansible_host }}:{{ portainer_port }}"
+  api_user     = "{{ portainer_user }}"
+  api_password = "{{ portainer_password }}"
+
+  # Optional: skip_ssl_verify = "true"
+}
+
+resource "portainer_stack" "{{ compose_name }}" {
+  name        = "{{ compose_name }}"
+  endpoint_id = {{ portainer_endpoint_id | default(1) }}
+  stack_file_path     = "./docker-compose.yml"
+  deployment_type = "standalone"  
+  method  = "file"       
+
+  # Optional attributes:
+  # prune     = {{ prune | default('true') | bool }}
+  # env       = {{ env_vars | default({}) }}
+  # additional_files = {{ additional_files | default({}) }}
+}

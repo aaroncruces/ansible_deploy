@@ -1,0 +1,8 @@
+---
+- name: Configure linuxvm
+  hosts: linuxvm
+  become_method: sudo
+  gather_facts: true # for {{ ansible_env.HOME }}
+  roles:
+    - linuxvm
+...

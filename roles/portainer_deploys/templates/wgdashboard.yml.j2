@@ -1,0 +1,17 @@
+services:
+  wgdashboard:
+    image: donaldzou/wgdashboard:latest
+    restart: unless-stopped
+    container_name: wgdashboard
+    environment:
+      - TZ=America/Santiago  
+    ports:
+      - 10086:10086/tcp
+      - 51820:51820/udp
+    volumes:
+      - "{{ ansible_env.HOME }}/dockers/wgdashboard/conf:/etc/wireguard"
+      - "{{ ansible_env.HOME }}/dockers/wgdashboard/data:/data"
+    cap_add:
+      - NET_ADMIN
+
+{{ compose_extra_params | default() }}

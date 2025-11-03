@@ -1,0 +1,18 @@
+services:
+  mediamtx:
+    image: bluenviron/mediamtx:latest
+    container_name: mediamtx
+    restart: unless-stopped
+    ports:
+      - "8805:8554"   # RTSP
+      - "8804:1935"   # RTMP (optional)
+      - "8803:8888"   # HLS (optional)
+      - "8802:8889"   # WebRTC (optional)
+      - "8801:8000/udp"  # RTP/RTCP (for publishing, optional)
+      - "8800:8001/udp"  # RTP/RTCP (for publishing, optional)
+    environment:
+      - MTX_HLSVARIANT=lowLatency
+      - MTX_HLSSEGMENTDURATION=1s
+      - MTX_HLSPARTDURATION=200ms
+      - MTX_HLSSEGMENTCOUNT=8
+      - MTX_HLSALLOWORIGIN=*

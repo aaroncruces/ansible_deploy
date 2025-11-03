@@ -21,4 +21,12 @@ all:
     localhost_group:
       hosts:
         localhost: {}
+
+    azure:
+      children:
+        azure_vm:
+          hosts:
+            linuxvm: {}
+            linuxcritico: {}
+
 ...

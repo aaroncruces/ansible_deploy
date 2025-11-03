@@ -1,0 +1,8 @@
+- name: Docker Compose for {{ compose_name }} 
+  include_tasks: generate_compose.yml
+
+- name: Terraform for {{ compose_name }} 
+  include_tasks: generate_tf.yml
+
+- name: Deploy {{ compose_name }} on portainer
+  include_tasks: deploy_tf.yml
