@@ -1,0 +1,28 @@
+- name: Add NVIDIA modules for early loading in initramfs (including uvm)
+  ansible.builtin.lineinfile:
+    path: /etc/initramfs-tools/modules
+    line: "{{ item }}"
+    create: yes
+    owner: root
+    group: root
+    mode: '0644'
+  loop:
+    - nvidia
+    - nvidia_modeset
+    - nvidia_uvm
+    - nvidia_drm
+  when: nvidia_check.rc != 0
+  become: true
+
+- name: Regenerate initramfs to apply Nouveau blacklist and early NVIDIA loading
+  ansible.builtin.command:
+    cmd: update-initramfs -u -k all
+  become: true
+  when: nvidia_check.rc != 0
+  changed_when: false
+
+- name: Reboot system after NVIDIA driver installation
+  ansible.builtin.reboot:
+    reboot_timeout: 300
+    become: true
+  when: nvidia_packages_installed is defined and nvidia_packages_installed.changed

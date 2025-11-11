@@ -9,7 +9,8 @@
       - cmake
       - make
       - rsync
+      - curl
       - tmux
-      
     state: present
+  become: true
 ...

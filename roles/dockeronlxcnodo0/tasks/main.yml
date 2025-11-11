@@ -1,0 +1,4 @@
+- name: traefik
+  include_tasks: "traefik_install.yml"
+  vars:
+    endpoint_id: "{{ hostvars['linuxvm']['portainer_endpoint_id'] }}"

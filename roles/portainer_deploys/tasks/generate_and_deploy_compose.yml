@@ -1,3 +1,11 @@
+- name: Ensure dockers/service folder exists for the current user
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/dockers/{{ compose_name }}"
+    state: directory
+    mode: '0755'
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+ 
 - name: Docker Compose for {{ compose_name }} 
   include_tasks: generate_compose.yml
 

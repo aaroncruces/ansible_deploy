@@ -1,0 +1,22 @@
+---
+- name: proxmox header apt sources
+  include_role:
+    name: proxmox
+    tasks_from: proxmox_apt.yml
+
+- name: nvidia install
+  include_role:
+    name: nvidia
+    tasks_from: nvidia_install.yml
+
+- name: nvidia container toolkit
+  include_role:
+    name: nvidia
+    tasks_from: nvidia_container_toolkit.yml
+
+- name: nvidia extra packages
+  include_role:
+    name: nvidia
+    tasks_from: nvidia_extras.yml
+
+

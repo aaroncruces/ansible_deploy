@@ -1,0 +1,41 @@
+# docker-compose.yml - Standalone Docker mode for Traefik (no Swarm)
+# This switches to standard Docker Compose deployment (use 'docker compose up -d' or Portainer stacks in standalone mode).
+# Remove the 'deploy' block entirely—it's not needed and invalid for standalone.
+# Keep networks attached to Traefik for local discovery; for remote hosts, Traefik connects via TCP endpoints in traefik.yml.
+# Labels are now at service level (same level as networks/ports) for Docker provider discovery.
+# Dashboard rule simplified to host-only for reliability (internal service handles /dashboard/ path).
+# Ports use standard format (no target/published/mode).
+
+services:
+  traefik:
+    image: traefik:latest
+    container_name: traefik
+    restart: unless-stopped
+    security_opt:
+      - apparmor:unconfined
+    networks:
+      - {{ reverseproxynetwork | default("reverseproxynetwork")}}
+    ports:
+      - 80:80
+      - 443:443
+      # - 443:443/udp  # Uncomment for HTTP/3
+    environment:
+      TRAEFIK_DASHBOARD_CREDENTIALS: ${TRAEFIK_DASHBOARD_CREDENTIALS}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - {{ ansible_env.HOME }}/dockers/traefik/configfiles/traefik.yml:/traefik.yml:ro
+      - {{ ansible_env.HOME }}/dockers/traefik/configfiles/dynamic.yml:/dynamic.yml:ro
+      - {{ ansible_env.HOME }}/dockers/traefik/certs:/certs:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=Host(`{{ subdomain }}.{{ domain_name }}`)"
+      - "traefik.http.routers.api.service=api@internal"
+      - "traefik.http.routers.api.middlewares=traefikauth"
+      - "traefik.http.routers.api.tls=true"
+      - "traefik.http.routers.api.entrypoints=websecure"
+      - "traefik.http.routers.api.priority=999"
+      - "traefik.http.middlewares.traefikauth.basicauth.users=${TRAEFIK_DASHBOARD_CREDENTIALS}"
+networks:
+  {{ reverseproxynetwork | default("reverseproxynetwork")}}:
+    external: true

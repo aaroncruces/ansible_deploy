@@ -1,4 +1,7 @@
 ---
-- name: Proxmox
-  include_tasks: proxmox.yml
+- name: Proxmox apt sources
+  include_tasks: proxmox_apt.yml
+
+- name: Install Proxmox
+  include_tasks: proxmox_install.yml
 ...

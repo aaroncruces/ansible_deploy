@@ -2,6 +2,9 @@
 - name: nvidia install
   include_tasks: nvidia_install.yml
 
+- name: nvidia initramfs mudules
+  include_tasks: nvidia_initramfs.yml
+  
 - name: nvidia container toolkit
   include_tasks: nvidia_container_toolkit.yml
 
@@ -10,4 +13,4 @@
 
 - name: nvidia extra packages
   include_tasks: nvidia_extras.yml
-  
+

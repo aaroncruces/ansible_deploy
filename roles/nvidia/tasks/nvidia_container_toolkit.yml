@@ -4,6 +4,7 @@
   register: nvidia_ctk_check
   failed_when: false
   changed_when: false
+  become: true
 
 - name: Install required packages for NVIDIA Container Toolkit
   ansible.builtin.apt:
@@ -13,6 +14,7 @@
     state: present
     update_cache: true
   when: nvidia_ctk_check.rc != 0
+  become: true
 
 - name: Create keyrings directory
   ansible.builtin.file:
@@ -20,6 +22,7 @@
     state: directory
     mode: '0755'
   when: nvidia_ctk_check.rc != 0
+  become: true
 
 - name: Download and add NVIDIA Container Toolkit GPG key
   ansible.builtin.get_url:
@@ -27,18 +30,21 @@
     dest: /tmp/nvidia-container-toolkit.gpg
     mode: '0644'
   when: nvidia_ctk_check.rc != 0
+  become: true
 
 - name: Convert GPG key to keyring format
   ansible.builtin.command:
     cmd: gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg /tmp/nvidia-container-toolkit.gpg
   when: nvidia_ctk_check.rc != 0
   changed_when: false
+  become: true
 
 - name: Remove temporary GPG key file
   ansible.builtin.file:
     path: /tmp/nvidia-container-toolkit.gpg
     state: absent
   when: nvidia_ctk_check.rc != 0
+  become: true
 
 - name: Add NVIDIA Container Toolkit repository
   ansible.builtin.get_url:
@@ -46,23 +52,27 @@
     dest: /tmp/nvidia-container-toolkit.list
     mode: '0644'
   when: nvidia_ctk_check.rc != 0
+  become: true
 
 - name: Configure repository with signed-by
   ansible.builtin.shell: |
     sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' /tmp/nvidia-container-toolkit.list > /etc/apt/sources.list.d/nvidia-container-toolkit.list
   when: nvidia_ctk_check.rc != 0
   changed_when: false
+  become: true
 
 - name: Remove temporary repository file
   ansible.builtin.file:
     path: /tmp/nvidia-container-toolkit.list
     state: absent
   when: nvidia_ctk_check.rc != 0
+  become: true
 
 - name: Update apt cache after adding repository
   ansible.builtin.apt:
     update_cache: true
   when: nvidia_ctk_check.rc != 0
+  become: true
 
 - name: Install NVIDIA Container Toolkit packages
   ansible.builtin.apt:
@@ -74,15 +84,25 @@
     state: present
   register: nvidia_ctk_installed
   when: nvidia_ctk_check.rc != 0
+  become: true
 
 - name: Configure Docker runtime for NVIDIA Container Toolkit
   ansible.builtin.command:
     cmd: nvidia-ctk runtime configure --runtime=docker
   when: nvidia_ctk_installed is defined and nvidia_ctk_installed.changed
   changed_when: false
+  become: true
+
+- name: Configure Docker runtime for NVIDIA Container Toolkit
+  ansible.builtin.command:
+    cmd: nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
+  when: nvidia_ctk_installed is defined and nvidia_ctk_installed.changed
+  changed_when: false
+  become: true
 
 - name: Restart Docker service
   ansible.builtin.systemd:
     name: docker
     state: restarted
   when: nvidia_ctk_installed is defined and nvidia_ctk_installed.changed
+  become: true

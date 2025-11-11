@@ -1,0 +1,45 @@
+services:
+
+  webui:
+    image: ghcr.io/open-webui/open-webui:main
+    restart: unless-stopped
+    ports:
+     - 7110:8080/tcp
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434 # the container below
+    volumes:
+      - {{ ansible_env.HOME }}/dockers/ollama/webui:/app/backend/data
+    depends_on:
+     - ollama
+    security_opt:
+      - apparmor:unconfined
+    networks:
+      # IN PORTAINER IS POSIBLE THAT SOME NETWORKS WONT ATTACH. MAKE SURE THAT THESE ARE
+      - {{ reverseproxynetwork | default("reverseproxynetwork")}}
+      
+  ollama:
+    image: ollama/ollama
+    restart: unless-stopped
+    ports:
+     - 7111:11434
+    healthcheck:
+      test: ollama --version || exit 1
+    command: serve
+    volumes:
+      - {{ ansible_env.HOME }}/dockers/ollama/ollama:/root/.ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: cdi
+              device_ids:
+                - nvidia.com/gpu=all
+              capabilities: [gpu]
+    security_opt:
+      - apparmor:unconfined
+    networks:
+      - {{ reverseproxynetwork | default("reverseproxynetwork")}}
+      
+networks:
+  {{ reverseproxynetwork | default("reverseproxynetwork")}}:
+    external: true

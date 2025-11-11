@@ -4,67 +4,7 @@
   register: proxmox_check
   ignore_errors: true
   changed_when: false
-
-- name: Remove all Proxmox-related sources
-  shell: rm -f /etc/apt/sources.list.d/*pve* /etc/apt/sources.list.d/*proxmox*
-  when: proxmox_check.rc != 0
-  changed_when: true
-
-- name: Remove all Proxmox-related keys
-  shell: rm -f /etc/apt/keyrings/*proxmox* /usr/share/keyrings/*proxmox* /etc/apt/trusted.gpg.d/*proxmox* /var/lib/apt/lists/*proxmox*
-  when: proxmox_check.rc != 0
-  changed_when: true
-
-- name: Clean APT cache and lists
-  shell: apt clean && apt autoclean && rm -rf /var/lib/apt/lists/*
-  when: proxmox_check.rc != 0
-  environment:
-    DEBIAN_FRONTEND: noninteractive
-
-- name: Install required packages for Proxmox
-  apt:
-    name:
-      - ca-certificates
-      - curl
-      - gnupg
-      - wget
-    state: present
-  when: proxmox_check.rc != 0
-  environment:
-    DEBIAN_FRONTEND: noninteractive
-
-- name: Download Proxmox VE archive keyring
-  get_url:
-    url: https://enterprise.proxmox.com/debian/proxmox-archive-keyring-trixie.gpg
-    dest: /usr/share/keyrings/proxmox-archive-keyring.gpg
-    mode: '0644'
-  when: proxmox_check.rc != 0
-
-- name: Add Proxmox VE no-subscription repository (deb822 format)
-  copy:
-    dest: /etc/apt/sources.list.d/pve-install-repo.sources
-    content: |
-      Types: deb
-      URIs: http://download.proxmox.com/debian/pve
-      Suites: {{ ansible_distribution_release }}
-      Components: pve-no-subscription
-      Signed-By: /usr/share/keyrings/proxmox-archive-keyring.gpg
-  when: proxmox_check.rc != 0
-
-- name: Update repositories (ignore errors after cleanup)
-  apt:
-    update_cache: yes
-  when: proxmox_check.rc != 0
-  ignore_errors: true
-  environment:
-    DEBIAN_FRONTEND: noninteractive
-
-- name: Full system upgrade
-  apt:
-    upgrade: full
-  when: proxmox_check.rc != 0
-  environment:
-    DEBIAN_FRONTEND: noninteractive
+  become: true
 
 - name: Install Proxmox default kernel
   apt:
@@ -73,12 +13,14 @@
   when: proxmox_check.rc != 0
   environment:
     DEBIAN_FRONTEND: noninteractive
+  become: true
 
 - name: Get installed Proxmox kernel version
   shell: dpkg -l | grep '^ii  proxmox-kernel-.*-pve' | awk '{print $2}' | sed 's/proxmox-kernel-//' | sed 's/-signed$//' | head -1
   register: kernel_version
   changed_when: false
   when: proxmox_check.rc != 0
+  become: true
 
 - name: Install Proxmox headers for current kernel
   apt:
@@ -87,6 +29,7 @@
     update_cache: true
   when: proxmox_check.rc != 0
   notify: reboot system
+  become: true
 
 - name: Install Proxmox VE packages
   apt:
@@ -101,6 +44,7 @@
   when: proxmox_check.rc != 0
   environment:
     DEBIAN_FRONTEND: noninteractive
+  become: true
 
 - name: Disable Proxmox Enterprise repository
   lineinfile:
@@ -109,6 +53,7 @@
     line: '#deb https://enterprise.proxmox.com/debian/pve {{ ansible_distribution_release }} pve-enterprise'
     create: true
   when: proxmox_check.rc != 0
+  become: true
 
 - name: Purge ZFS DKMS if not needed
   apt:
@@ -119,6 +64,7 @@
   when: proxmox_check.rc != 0
   environment:
     DEBIAN_FRONTEND: noninteractive
+  become: true
 
 - name: Remove Debian kernel
   apt:
@@ -129,10 +75,12 @@
   when: proxmox_check.rc != 0
   environment:
     DEBIAN_FRONTEND: noninteractive
+  become: true
 
 - name: Update GRUB
   command: update-grub
   when: proxmox_check.rc != 0
+  become: true  
 
 - name: Remove os-prober package
   apt:
@@ -141,6 +89,7 @@
   when: proxmox_check.rc != 0
   environment:
     DEBIAN_FRONTEND: noninteractive
+  become: true
 
 - name: Configure hosts file
   template:
@@ -148,12 +97,14 @@
     dest: /etc/hosts
     backup: yes
   when: proxmox_check.rc != 0
+  become: true
 
 - name: Set network variables
   set_fact:
     subnet_mask: 24
     gateway: "{{ ansible_host | regex_replace('\\.\\d+$', '.1') }}"
   when: proxmox_check.rc != 0
+  become: true
 
 - name: Get physical interfaces names
   command: find /sys/class/net -type l -not -lname '*virtual*' -printf '%f\n'
@@ -161,11 +112,13 @@
   changed_when: false
   check_mode: false
   when: proxmox_check.rc != 0
+  become: true
 
 - name: Set physical interface (first non-virtual)
   set_fact:
     physical_interface: "{{ physical_interfaces_cmd.stdout_lines | reject('match', '^lo$') | first | default('eno1') }}"  # Exclude lo, fallback to eno1 if none found
   when: proxmox_check.rc != 0
+  become: true
 
 - name: Configure network interfaces for Proxmox
   template:
@@ -174,3 +127,4 @@
     backup: yes
   when: proxmox_check.rc != 0
   notify: reload networking
+  become: true

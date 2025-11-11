@@ -13,5 +13,10 @@ services:
       - "{{ ansible_env.HOME }}/dockers/wgdashboard/data:/data"
     cap_add:
       - NET_ADMIN
-
+    networks:
+      - {{ reverseproxynetwork | default("reverseproxynetwork")}}
 {{ compose_extra_params | default() }}
+networks:
+  {{ reverseproxynetwork | default("reverseproxynetwork")}}:
+    external: true
+

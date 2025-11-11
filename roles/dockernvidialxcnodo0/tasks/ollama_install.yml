@@ -1,0 +1,19 @@
+- name: Ensure folder exists
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/dockers/ollama/"
+    state: directory
+    mode: '0755'
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+
+- name: launch ollama 
+  include_tasks: "{{ playbook_dir }}/roles/portainer_deploys/tasks/generate_and_deploy_compose.yml"
+  vars:
+    compose_name: "ollama"
+    endpoint_id: "{{ hostvars['dockernvidialxcnodo0']['portainer_endpoint_id'] }}"
+    portainer_host: "{{ hostvars['linuxvm']['ansible_host'] }}"
+    portainer_port: "{{ hostvars['linuxvm']['portainer_port'] }}"
+    portainer_user: "{{ hostvars['linuxvm']['portainer_user'] }}"
+    portainer_password: "{{ hostvars['linuxvm']['portainer_password'] }}"
+    subdomain: "ia"
+ 

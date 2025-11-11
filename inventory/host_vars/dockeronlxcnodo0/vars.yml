@@ -10,5 +10,7 @@ ansible_user: ceim
 ansible_ssh_private_key_file: ~/.ssh/id_ed25519_nopass
 ansible_python_interpreter: /usr/bin/python3
 portainer_external_port: 9010
-portainer_url: "portainerlocal.ceim.cl"
+portainer_endpoint_id: 4 # from https://portainerlinuxvm.ceim.cl/#!/endpoints
+reverseproxynetwork: "dockeronlxcnodo0"
+#  docker swarm join --token SWMTKN-1-3occzmynmu31m4wudwhabbnxio9hf9gi2lnyhlyhm81cwa6xdc-6r0oezz82uofrnehu3fg50vn2 200.200.200.142:2377
 ...

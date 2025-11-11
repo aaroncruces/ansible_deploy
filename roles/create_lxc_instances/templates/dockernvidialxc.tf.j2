@@ -1,13 +1,13 @@
-resource "proxmox_virtual_environment_container" "{{ hostname }}" {
+resource "proxmox_virtual_environment_container" "{{ lxc_hostname }}" {
 
-  node_name = "{{ inventory_hostname }}"
+  node_name = "{{ node_hostname }}"
   vm_id = {{ vm_id }} # Optional; auto-assigned if omitted
   description = "{{ description }}"
   started = true
-  unprivileged = true
+  unprivileged = false
 
   initialization {
-    hostname = "{{ hostname }}"
+    hostname = "{{ lxc_hostname }}"
     user_account {
       password = "{{ lxc_password }}"
       keys = [

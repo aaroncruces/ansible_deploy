@@ -1,0 +1,20 @@
+# ---
+
+# - name: Create Instance on nodo0
+#   hosts: localhost
+#   connection: local
+#   gather_facts: true
+#   roles:
+#     - create_dockernvidialxcnodo0
+
+- name: Configure remote server
+  hosts: dockernvidialxcnodo0
+  become_method: sudo  
+  gather_facts: true
+  roles:
+    # - common_lxc_debian
+    # - docker
+    # - nvidia_lxc
+    - dockernvidialxcnodo0
+    
+     

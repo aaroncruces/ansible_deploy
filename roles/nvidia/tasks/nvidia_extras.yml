@@ -1,5 +1,6 @@
 ---
 - name: Install extra packages
-  package:
+  apt:
     name:
       - nvidia-cuda-toolkit
+  become: true

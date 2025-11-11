@@ -1,0 +1,29 @@
+tls:
+  certificates:
+    - certFile: /certs/fullchain.crt
+      keyFile: /certs/private.key
+http:
+  routers:
+    dummy:
+      rule: Host(`example.ceim.cl`)
+      service: dummy
+      entryPoints:
+        - websecure
+      tls: true
+      
+    ollama_webui:
+      rule: Host(`ia.ceim.cl`)
+      service: ollama_webui
+      entryPoints:
+        - websecure
+      tls: true
+
+  services:
+    dummy:
+      loadBalancer:
+        servers:
+          - url: http://192.0.2.0:54321
+    ollama_webui:
+      loadBalancer:
+        servers:
+          - url: http://{{ hostvars['dockernvidialxcnodo0']['ansible_host'] }}:7110

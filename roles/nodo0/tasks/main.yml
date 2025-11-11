@@ -1,4 +1,4 @@
 ---
-- name: earlyload from nvidia_smi
-  include_tasks: nvidia_smi.yml
+# - name: earlyload from nvidia_smi
+#   include_tasks: nvidia_smi.yml
 ...

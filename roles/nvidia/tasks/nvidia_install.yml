@@ -3,6 +3,7 @@
   register: nvidia_check
   failed_when: false
   changed_when: false
+  become: true
 
 - name: Call apt prepare to update
   include_role:
@@ -10,16 +11,49 @@
     tasks_from: apt_prepare.yml
   when: nvidia_check.rc != 0
 
+- name: Ensure non-free components are added to debian.sources
+  ansible.builtin.replace:
+    path: /etc/apt/sources.list.d/debian.sources
+    regexp: '^Components: contrib main$'
+    replace: 'Components: main contrib non-free non-free-firmware'
+    backup: yes
+  become: true
+  when: nvidia_check.rc != 0
+  register: sources_changed
+
+- name: Ensure backports repository is added
+  ansible.builtin.blockinfile:
+    path: /etc/apt/sources.list.d/debian.sources
+    block: |
+      Types: deb
+      URIs: http://deb.debian.org/debian
+      Suites: trixie-backports
+      Components: main contrib non-free non-free-firmware
+      Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
+    marker: "# {mark} ANSIBLE MANAGED BLOCK - backports"
+    insertafter: EOF
+  become: true
+  when: nvidia_check.rc != 0
+  register: backports_added
+
+- name: Update apt cache if sources changed
+  ansible.builtin.apt:
+    update_cache: true
+  become: true
+  when: (sources_changed.changed or backports_added.changed) and nvidia_check.rc != 0
+
 - name: Get current kernel version
   ansible.builtin.command: uname -r
   changed_when: false
   register: kernel_version
   when: nvidia_check.rc != 0
+  become: true
 
 - name: Set header package fact based on kernel type
   set_fact:
     header_package: "{{ 'proxmox-headers-' + kernel_version.stdout if 'pve' in kernel_version.stdout else 'linux-headers-' + kernel_version.stdout }}"
   when: nvidia_check.rc != 0
+  become: true
 
 - name: Install headers for current kernel
   ansible.builtin.apt:
@@ -27,10 +61,14 @@
     state: present
     update_cache: true
   when: nvidia_check.rc != 0
+  become: true
 
 - name: Ensure NVIDIA DKMS and related packages are installed on Debian
   ansible.builtin.apt:
     name:
+      - libdw1
+      - elfutils
+      - build-essential
       - nvidia-driver
       - nvidia-kernel-dkms
       - nvidia-vaapi-driver
@@ -56,33 +94,5 @@
     owner: root
     group: root
     mode: '0644'
-    become: true
-  when: nvidia_check.rc != 0
-
-- name: Add NVIDIA modules for early loading in initramfs (including uvm)
-  ansible.builtin.lineinfile:
-    path: /etc/initramfs-tools/modules
-    line: "{{ item }}"
-    create: yes
-    owner: root
-    group: root
-    mode: '0644'
-  loop:
-    - nvidia
-    - nvidia_modeset
-    - nvidia_uvm
-    - nvidia_drm
-  when: nvidia_check.rc != 0
-
-- name: Regenerate initramfs to apply Nouveau blacklist and early NVIDIA loading
-  ansible.builtin.command:
-    cmd: update-initramfs -u -k all
   become: true
   when: nvidia_check.rc != 0
-  changed_when: false
-
-- name: Reboot system after NVIDIA driver installation
-  ansible.builtin.reboot:
-    reboot_timeout: 300
-    become: true
-  when: nvidia_packages_installed is defined and nvidia_packages_installed.changed

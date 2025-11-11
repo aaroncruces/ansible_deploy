@@ -1,11 +1,6 @@
-- name: wgdashboard 
-  include_tasks: "{{ playbook_dir }}/roles/portainer_deploys/tasks/generate_and_deploy_compose.yml"
-  vars:
-    compose_name: "wgdashboard"
-    compose_extra_params: |
-          # extra params
-              networks:
-                - nginxproxymanager
-          networks:
-            nginxproxymanager:
-              external: true
+# - name: wgdashboard linuxvm
+#   include_tasks: "{{ playbook_dir }}/roles/portainer_deploys/tasks/generate_and_deploy_compose.yml"
+#   vars:
+#     compose_name: "wgdashboard"
+#     endpoint_id: "{{ hostvars['linuxvm']['portainer_endpoint_id'] }}"
+#     reverseproxynetwork: "nginxproxymanager"

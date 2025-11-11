@@ -1,0 +1,77 @@
+# - name: Generate Traefik dashboard credentials
+#   shell: |
+#     docker run --rm httpd:2.4-alpine htpasswd -nbB  | sed 's/\$/$$/g'
+#   register: traefik_dashboard_credentials
+#   changed_when: false  # Optional: Prevents marking as changed every run
+#   no_log: true  # Optional: Hides sensitive output in logs
+
+# Now you can use '{{ traefik_dashboard_credentials.stdout }}' in other tasks, e.g., for setting env vars in Terraform or elsewhere
+
+### SPECIAL CASE OF generate_and_deploy_compose FOR TRAEFIK
+
+- name: Ensure folder exists
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/dockers/traefik/certs"
+    state: directory
+    mode: '0755'
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+
+- name: Ensure folder exists
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/dockers/traefik/configfiles"
+    state: directory
+    mode: '0755'
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+ 
+- name: Copy cert files
+  copy:
+    src: "inventory/group_vars/ceim/files/{{ item }}"
+    dest: "{{ ansible_env.HOME }}/dockers/traefik/certs/{{ item }}"
+    mode: '0644'
+  loop:
+    - fullchain.crt
+    - private.key
+
+- name: Copy config file traefik.yml
+  template:
+    src: "roles/portainer_deploys/templates/traefik_config.yml.j2"  
+    dest:  "{{ ansible_env.HOME }}/dockers/traefik/configfiles/traefik.yml"
+    mode: '0644'
+
+- name: Copy config file dynamic.yml
+  template:
+    src: "roles/portainer_deploys/templates/traefik_dynamic.yml.j2"  
+    dest:  "{{ ansible_env.HOME }}/dockers/traefik/configfiles/dynamic.yml"
+    mode: '0644'
+
+
+- name: Generate Traefik dashboard credentials
+  shell: |
+    docker run --rm httpd:2.4-alpine htpasswd -nbB "{{ hostvars['dockeronlxcnodo0']['traefik_user'] }}" "{{ hostvars['dockeronlxcnodo0']['traefik_password'] }}" | sed 's/\$/$$/g'
+  register: traefik_dashboard_credentials_raw
+  changed_when: false
+  delegate_to: localhost
+
+- name: Set trimmed Traefik credentials
+  set_fact:
+    traefik_dashboard_credentials: "{{ traefik_dashboard_credentials_raw.stdout | trim }}"
+  delegate_to: localhost
+
+- name: traefik 
+  include_tasks: "{{ playbook_dir }}/roles/portainer_deploys/tasks/generate_and_deploy_compose.yml"
+  vars:
+    compose_name: "traefik"
+    endpoint_id: "{{ hostvars['dockeronlxcnodo0']['portainer_endpoint_id'] }}"
+    portainer_host: "{{ hostvars['linuxvm']['ansible_host'] }}"
+    portainer_port: "{{ hostvars['linuxvm']['portainer_port'] }}"
+    portainer_user: "{{ hostvars['linuxvm']['portainer_user'] }}"
+    portainer_password: "{{ hostvars['linuxvm']['portainer_password'] }}"
+    subdomain: "traefiklocal"
+    # docker run --rm httpd:2.4-alpine htpasswd -nbB your_username your_password | sed 's/\$/$$/g'
+    env_vars: |
+      {
+        name  = "TRAEFIK_DASHBOARD_CREDENTIALS"
+        value =  "{{ traefik_dashboard_credentials }}"
+      }

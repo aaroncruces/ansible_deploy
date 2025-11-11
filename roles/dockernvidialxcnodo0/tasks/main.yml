@@ -1,0 +1,4 @@
+
+- name: ollama
+  include_tasks: "ollama_install.yml"
+

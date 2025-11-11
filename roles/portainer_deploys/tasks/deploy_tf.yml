@@ -18,3 +18,7 @@
 
 
 # TODO: MAKE SURE THAT THE /dockers EXISTS IN THE HOME OF REMOTE
+# i have a host: 200.200.200.143
+# all its docker containers are in the docker network dockernvidialxcnodo0
+# i want to add it to the provider
+# and the docker

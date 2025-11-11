@@ -15,7 +15,7 @@ services:
       - apparmor:unconfined
     # TRAEFIK
     networks:
-      - reverseproxynetwork
+      - {{ reverseproxynetwork | default("reverseproxynetwork")}}
     labels:
       - "traefik.http.routers.portainer.rule=Host(`{{ portainer_url }}`)"  # e.g., portainerlocal.ceim.cl
       - "traefik.http.services.portainer.loadbalancer.server.port=9000"
@@ -23,10 +23,7 @@ services:
       - "traefik.http.routers.portainer.tls=true"
       - "traefik.http.routers.portainer.entrypoints=https"
       - "traefik.http.routers.portainer.middlewares=authentik@file"
-
 networks:
-  reverseproxynetwork:
-    name: reverseproxynetwork
+  {{ reverseproxynetwork | default("reverseproxynetwork")}}:
+    name: {{ reverseproxynetwork | default("reverseproxynetwork")}}
     driver: bridge
-# reverseproxynetwork:
-#   external: true

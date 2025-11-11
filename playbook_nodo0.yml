@@ -32,10 +32,10 @@
 #     - common_lxc_debian
 #     - docker
 
-- name: Configure dockeronlxcnodo0 instance
-  hosts: dockeronlxcnodo0
-  become_method: sudo
-  gather_facts: true
-  roles:
-    - portainer
+# - name: Configure dockeronlxcnodo0 instance
+#   hosts: dockeronlxcnodo0
+#   become_method: sudo
+#   gather_facts: true
+#   roles:
+#     - portainer
 ...

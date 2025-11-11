@@ -1,0 +1,37 @@
+- name: Generate terraform main
+  include_role:
+    name: create_lxc_instances
+    tasks_from: setup_main.yml
+  vars:
+    node_hostname: "{{ hostvars['nodo0']['inventory_hostname'] }}"
+    lxc_hostname: "{{ hostvars['dockernvidialxcnodo0']['inventory_hostname'] }}"
+    proxmox_endpoint: "https://{{ hostvars['nodo0']['ansible_host'] }}:8006/"
+    pm_password: "{{ hostvars['nodo0']['root_password'] }}"
+
+
+- name: Run terraform dockernvidialxc script
+  include_role:
+    name: create_lxc_instances
+    tasks_from: launch_lxc.yml
+  vars:
+    template_tf: "dockernvidialxc"
+    vm_id: 2002
+    description: "LXC for Docker with NVIDIA Container Toolkit"
+    ip_address: "{{ hostvars['dockernvidialxcnodo0']['ansible_host'] }}"
+    host_cidr: "{{ hostvars['dockernvidialxcnodo0']['cidr'] }}"
+    gateway: "{{ hostvars['dockernvidialxcnodo0']['gateway'] }}"
+    new_user: "{{ hostvars['dockernvidialxcnodo0']['ansible_user'] }}"
+    lxc_password: "{{ hostvars['dockernvidialxcnodo0']['ansible_become_password'] }}"
+    lxc_hostname: "{{ hostvars['dockernvidialxcnodo0']['inventory_hostname'] }}"
+    cores: 16
+    memory_dedicated: 16384
+    swap: 1024
+    datastore_id: "local" # wiere is the hdd stored in the proxmox
+    disk_size: 32
+    bridge: "vmbr0"
+    template_file_id: "local:vztmpl/debian-13-standard_13.1-2_amd64.tar.zst"
+    os_type: "debian"
+    node_hostname: "{{ hostvars['nodo0']['inventory_hostname'] }}"
+
+
+...

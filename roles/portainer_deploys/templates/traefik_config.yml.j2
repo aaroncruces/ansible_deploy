@@ -1,0 +1,69 @@
+# traefik.yml - Static configuration for standalone Docker mode
+# Switched providers to 'docker' (no 'swarm').
+# For multi-host: Add a remote endpoint example (tcp://192.168.2.10:2375) - replace with your remote host IP.
+# WARNING: TCP without TLS is INSECURE (exposes root access). Use TLS (port 2376, with certs) for production.
+# To secure: On remote host, edit Docker daemon.json with tlsverify, restart Docker, and provide certs to Traefik via environment or volumes.
+# For multiple remotes: Traefik supports only one endpoint per provider, so use agents like traefik-kop for more.
+
+global:
+  checkNewVersion: false
+  sendAnonymousUsage: false
+
+entryPoints:
+  web:
+    address: :80
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+          permanent: true
+    forwardedHeaders:
+      trustedIPs:
+        - 0.0.0.0/0  # Any IP - INSECURE for testing
+  websecure:
+    address: :443
+    http3: {}
+    http:
+      tls: {}
+    forwardedHeaders:
+      trustedIPs:
+        - 0.0.0.0/0  # Any IP - INSECURE for testing
+    transport:
+      respondingTimeouts:
+        idleTimeout: 180s
+
+providers:
+  docker:
+    endpoint: unix:///var/run/docker.sock  # Local host
+    watch: true
+    exposedByDefault: false
+    network: {{ reverseproxynetwork | default("reverseproxynetwork")}}  # Primary network; Traefik resolves services here
+    # For remote host example (add one per remote if using agents; for single, replace local endpoint):
+    # endpoint: "tcp://192.168.2.10:2375"  # Remote IP (insecure no TLS); use 2376 for TLS
+    # If TLS: Add volumes for certs (e.g., - /path/to/client/cert:/cert.pem), then endpoint: "tcp://remote-ip:2376"
+    # tls:
+    #   cert: /cert.pem
+    #   key: /key.pem
+    #   ca: /ca.pem
+
+  file:
+    filename: /dynamic.yml
+    watch: true
+
+api:
+  dashboard: true
+  insecure: false
+
+log:
+  level: debug
+  format: json
+
+accessLog:
+  format: json
+  bufferingSize: 0
+  filters:
+    statusCodes:
+      - 200-299
+      - 400-599
+    retryAttempts: true

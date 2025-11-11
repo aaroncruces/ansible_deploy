@@ -8,7 +8,7 @@ terraform {
 }
 
 provider "portainer" {
-  endpoint     = "http://{{ ansible_host }}:{{ portainer_port }}"
+  endpoint     = "http://{{ portainer_host | default(ansible_host) }}:{{ portainer_port }}"
   api_user     = "{{ portainer_user }}"
   api_password = "{{ portainer_password }}"
 
@@ -17,13 +17,16 @@ provider "portainer" {
 
 resource "portainer_stack" "{{ compose_name }}" {
   name        = "{{ compose_name }}"
-  endpoint_id = {{ portainer_endpoint_id | default(1) }}
+  endpoint_id = {{ endpoint_id | default(1) }}
   stack_file_path     = "./docker-compose.yml"
   deployment_type = "standalone"  
   method  = "file"       
 
   # Optional attributes:
   # prune     = {{ prune | default('true') | bool }}
-  # env       = {{ env_vars | default({}) }}
+  # env  {{ env_vars | default({}) }}
+  {% if env_vars is defined and env_vars %}
+  env {{ env_vars }}
+  {% endif %}
   # additional_files = {{ additional_files | default({}) }}
 }
