@@ -1,0 +1,11 @@
+---
+ansible_host: 200.200.200.133
+dns_servers:
+  - 1.1.1.1
+  - 200.200.200.35
+  - 10.0.14.4
+ansible_port: 22
+ansible_user: ceim
+ansible_ssh_private_key_file: ~/.ssh/id_ed25519_nopass
+ansible_python_interpreter: /usr/bin/python3
+...

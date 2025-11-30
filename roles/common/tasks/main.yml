@@ -11,25 +11,25 @@
 - name: Edit user properties
   include_tasks: user.yml
 
-- name: Install Zsh
-  include_tasks: zsh.yml
-
-- name: stow dotfiles common
-  include_tasks: stow.yml
-
-- name: tmux
-  include_tasks: tmux.yml
-
 - name: neovim
   include_tasks: neovim.yml
 
-- name: autologin using systemd
-  include_tasks: autologin.yml
-
-- name: fonts for terminal apps
-  include_tasks: fonts.yml
-
 - name: zram
   include_tasks: zram.yml
+
+# - name: Install Zsh
+#   include_tasks: zsh.yml
+
+# - name: stow dotfiles common
+#   include_tasks: stow.yml
+
+# - name: tmux
+#   include_tasks: tmux.yml
+
+# - name: autologin using systemd
+#   include_tasks: autologin.yml
+
+# - name: fonts for terminal apps
+#   include_tasks: fonts.yml
 
 ...

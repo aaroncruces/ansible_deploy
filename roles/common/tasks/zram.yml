@@ -4,6 +4,7 @@
     name:
       - zram-tools
     state: present
+  become: true
 
 - name: Ensure zRAM compression algorithm is set
   ansible.builtin.lineinfile:
@@ -13,6 +14,7 @@
     state: present
     mode: '0644'
   # notify: Restart zramswap service
+  become: true
 
 - name: Ensure zRAM percentage is set
   ansible.builtin.lineinfile:
@@ -22,15 +24,18 @@
     state: present
     mode: '0644'
   # notify: Restart zramswap service
+  become: true
 
 - name: Ensure zram-tools is installed
   ansible.builtin.package:
     name: zram-tools
     state: present
+  become: true
 
 - name: Reload systemd daemon
   systemd:
     daemon_reload: yes
+  become: true
 
 # - name: Reboot system for service
 #   ansible.builtin.reboot:

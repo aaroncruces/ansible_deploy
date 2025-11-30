@@ -4,7 +4,8 @@
     name:
       - flatpak
     state: present
-
+  become: true
+  
 - name: Add Flathub remote repository
   community.general.flatpak_remote:
     name: flathub

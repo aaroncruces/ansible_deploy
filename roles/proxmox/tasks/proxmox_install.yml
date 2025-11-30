@@ -28,7 +28,7 @@
     state: present
     update_cache: true
   when: proxmox_check.rc != 0
-  notify: reboot system
+  # notify: reboot system
   become: true
 
 - name: Install Proxmox VE packages
@@ -82,6 +82,15 @@
   when: proxmox_check.rc != 0
   become: true  
 
+# - name: Install ZFS packages from main repository (Trixie)
+#   apt:
+#     name:
+#       - zfsutils-linux
+#       - zfs-dkms
+#     state: present
+#   register: zfs_installed
+#   when: is_trixie
+
 - name: Remove os-prober package
   apt:
     name: os-prober
@@ -126,5 +135,5 @@
     dest: /etc/network/interfaces
     backup: yes
   when: proxmox_check.rc != 0
-  notify: reload networking
+  # notify: reload networking
   become: true

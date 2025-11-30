@@ -77,7 +77,6 @@
     reboot_timeout: 600
   when: zfs_installed.changed
 
-
 - name: Load ZFS kernel module
   modprobe:
     name: zfs

@@ -1,5 +1,6 @@
 all:
   children:
+
     redtower_server:
       hosts:
         redtower: {}
@@ -14,7 +15,7 @@ all:
     
     ceim:
       children:
-        nodo0_lxc:
+        nodo0_proxmox:
           hosts:
             nodo0: {}
           children:
@@ -22,6 +23,15 @@ all:
               hosts:
                 dockeronlxcnodo0: {}
                 dockernvidialxcnodo0: {}
+
+        nodo2_proxmox:
+          hosts:
+            nodo2: {}       
+
+        nodo3_proxmox:
+          hosts:
+            nodo3: {}              
+
         azure:
           children:
             azure_vm:

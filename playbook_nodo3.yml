@@ -1,0 +1,13 @@
+---
+- name: Configure nodo3
+  hosts: nodo3
+  become_method: sudo
+  gather_facts: true
+  roles:
+    - common
+    - proxmox
+    # - intel
+    # - finally
+  
+
+...

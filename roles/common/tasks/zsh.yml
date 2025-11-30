@@ -10,12 +10,14 @@
     name: zsh
     state: present
   when: zsh_check.rc != 0
+  become: true
 
 - name: Change user shell to zsh
   user:
     name: "{{ ansible_user }}"
     shell: /bin/zsh
     append: no
+  become: true
 
 - name: Check if antidote is already installed
   stat:
@@ -41,6 +43,7 @@
   apt:
     name: unzip
     state: present
+  become: true
 
 - name: Download Oh My Posh installer
   get_url:
